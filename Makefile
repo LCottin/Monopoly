@@ -22,7 +22,7 @@ $(EXEC): $(OBJ)
 	$(CC) $(CFLAGS) -c $<  -o $@
 
 clean:
-	rm -rf ./src/*.of
+	rm -rf ./src/*.o
 	rm $(EXEC)
 	@echo Files deleted
 
