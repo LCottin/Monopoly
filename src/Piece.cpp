@@ -75,6 +75,43 @@ Piece::Piece(const TYPES type)
 }
 
 /**
+ * Gets the sprite of the piece to draw
+ * @returns The sprite to draw
+ */
+Sprite* Piece::getSprite()
+{
+    return &_Sprite;
+}
+
+/**
+ * Indicates which piece it is 
+ * @returns The type of the piece
+ */
+TYPES Piece::getType() const 
+{
+    return _Type;
+}
+
+/**
+ * Tells where the piece is 
+ * @returns A vector containing piece position
+ */
+Vector2i Piece::getPosition() const
+{
+    return _Position;
+}
+
+/**
+ * Moves the piece
+ * @param newPos Vector2i of the new position
+ */
+void Piece::move(const Vector2i newPos)
+{
+    _Sprite.setPosition(Vector2f(newPos));
+    _Position = newPos;
+}
+
+/**
  * Default destructor
  */
 Piece::~Piece()

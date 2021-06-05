@@ -22,6 +22,10 @@ private:
 public:
     Piece();
     Piece(const TYPES type);
+    Sprite*     getSprite();
+    TYPES       getType() const;
+    Vector2i    getPosition() const;
+    void        move(const Vector2i newPos);
     ~Piece();
 };
 
