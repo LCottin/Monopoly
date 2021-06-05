@@ -35,8 +35,7 @@ int main(int argc, char const *argv[])
         
         window.clear();
 
-        int roll = d.roll();
-        //Sprite* diceSprite = d.getSprite();
+        d.roll();
         window.draw(*d.getSprite());
 
         window.display();
