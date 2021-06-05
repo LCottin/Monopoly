@@ -7,23 +7,21 @@
 
 #include <iostream>
 #include <random>
-// #include <SFML/Graphics.hpp>
-// #include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
 
 using namespace std;
-// using namespace sf;
+using namespace sf;
 
 class Dice
 {
     private:
-        //Sprite  _DiceSprite;
-        //Texture _DiceTexture;
-        void update();
+        Sprite  _Sprite;
+        Texture _Texture;
         
     public:
         Dice();
-        int roll() const;
-        //Sprite* getSprite() const;
+        int roll();
+        Sprite* getSprite();
         ~Dice();
 };
 
