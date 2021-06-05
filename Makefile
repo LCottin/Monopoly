@@ -6,7 +6,8 @@ EXEC	= main
 SRC = 	./src/main.cpp \
 		./src/Dice.cpp \
 		./src/Bank.cpp \
-		./src/Piece.cpp
+		./src/Piece.cpp \
+		./src/Player.cpp
 
 OBJ = $(SRC:.cpp=.o)
 
