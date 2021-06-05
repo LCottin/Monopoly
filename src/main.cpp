@@ -8,6 +8,7 @@
 #include <SFML/Window.hpp>
 
 #include "Dice.hpp"
+#include "Piece.hpp"
 
 using namespace std;
 using namespace sf;
@@ -16,6 +17,11 @@ int main(int argc, char const *argv[])
 {
     //Dice creation
     Dice d;
+    Piece p(BARROW);
+    Texture font;
+    font.loadFromFile("./Images/font.png");
+    Sprite bg;
+    bg.setTexture(font);
 
     //Creation of a window to try drawing the dice
     RenderWindow window(VideoMode(600, 600), "try");
@@ -34,10 +40,13 @@ int main(int argc, char const *argv[])
         }
         
         window.clear();
+        window.draw(bg);
 
-        int roll = d.roll();
-        //Sprite* diceSprite = d.getSprite();
+        d.roll();
         window.draw(*d.getSprite());
+        
+        p.move(Vector2i(100, 100));
+        window.draw(*p.getSprite());
 
         window.display();
     }
