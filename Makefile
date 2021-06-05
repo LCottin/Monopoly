@@ -4,7 +4,8 @@ LIBS	= -lsfml-graphics -lsfml-system -lsfml-window -lm
 EXEC	= main
 
 SRC = 	./src/main.cpp \
-		./src/Dice.cpp
+		./src/Dice.cpp \
+		./src/Bank.cpp
 
 OBJ = $(SRC:.cpp=.o)
 
@@ -26,4 +27,3 @@ clean:
 	rm $(EXEC)
 	@echo Files deleted
 
-# DO NOT DELETE THIS LINE -- make depend needs it
