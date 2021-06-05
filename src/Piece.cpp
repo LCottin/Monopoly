@@ -10,7 +10,8 @@ Piece::Piece()
 Piece::Piece(const TYPES type)
 {
     //sets initial position at 0, 0
-    _Position = Vector2i(0, 0);
+    _Position   = Vector2i(0, 0);
+    _Scale      = Vector2f(0.2, 0.2);
 
     //loads correct texture
     switch (type)
@@ -71,7 +72,18 @@ Piece::Piece(const TYPES type)
             break;
     }
     _Sprite.setTexture(_Texture);
+    _Sprite.scale(_Scale);
     _Sprite.setPosition(Vector2f(_Position));
+}
+
+/**
+ * Changes the scale of the sprite
+ * @param newScale New scale of the sprite
+ */
+void Piece::setScale(const double newScale)
+{
+    _Scale = Vector2f(newScale, newScale);
+    _Sprite.scale(_Scale);
 }
 
 /**
