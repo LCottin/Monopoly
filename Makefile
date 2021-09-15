@@ -3,7 +3,7 @@
 #-----------------------------------------#
 CX		 = g++
 EXT		 = cpp
-CXFLAGS  = -std=c++14 -Wall -g
+CXFLAGS  = -std=c++14 -Wall
 LIBS	 = -lsfml-graphics -lsfml-system -lsfml-window -lm
 EXEC	 = main
 DIR_OBJS = ./bin
