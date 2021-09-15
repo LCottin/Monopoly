@@ -4,8 +4,8 @@
 
 #include <iostream>
 #include <string>
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
+#include "SFML/Graphics.hpp"
+#include "SFML/Window.hpp"
 
 #include "Dice.hpp"
 #include "Piece.hpp"
@@ -18,7 +18,7 @@ int main(int argc, char const *argv[])
 {
     //Dice creation
     Dice d;
-    Player pl("Test");
+    Player* pl = new Player("Test");
 
     Texture font;
     font.loadFromFile("./Images/font.png");
@@ -48,12 +48,13 @@ int main(int argc, char const *argv[])
         d.roll();
         window.draw(*d.getSprite());
         
-        pl.getPiece()->move(Vector2i(100, 100));
-        window.draw(*pl.getPiece()->getSprite());
+        pl->getPiece()->move(Vector2f(100, 100));
+        window.draw(*pl->getPiece()->getSprite());
 
         window.display();
     }
 
+    delete pl;
     cout << "Runned main" << endl;
     return 0;
 }

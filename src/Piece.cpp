@@ -10,7 +10,7 @@ Piece::Piece()
 Piece::Piece(const TYPES type)
 {
     //sets initial position at 0, 0
-    _Position   = Vector2i(0, 0);
+    _Position   = Vector2f(0, 0);
     _Scale      = Vector2f(0.2, 0.2);
 
     //loads correct texture
@@ -73,7 +73,7 @@ Piece::Piece(const TYPES type)
     }
     _Sprite.setTexture(_Texture);
     _Sprite.scale(_Scale);
-    _Sprite.setPosition(Vector2f(_Position));
+    _Sprite.setPosition(_Position);
 }
 
 /**
@@ -92,6 +92,7 @@ void Piece::setScale(const double newScale)
  */
 Sprite* Piece::getSprite()
 {
+    cout << "get sprite" << endl;
     return &_Sprite;
 }
 
@@ -108,7 +109,7 @@ TYPES Piece::getType() const
  * Tells where the piece is 
  * @returns A vector containing piece position
  */
-Vector2i Piece::getPosition() const
+Vector2f Piece::getPosition() const
 {
     return _Position;
 }
@@ -117,10 +118,13 @@ Vector2i Piece::getPosition() const
  * Moves the piece
  * @param newPos Vector2i of the new position
  */
-void Piece::move(const Vector2i newPos)
+void Piece::move(const Vector2f newPos)
 {
-    _Sprite.setPosition(Vector2f(newPos));
+    cout << "Begin move" << endl;
+    _Sprite.setPosition(newPos);
+    cout << "moved sprite" << endl;
     _Position = newPos;
+    cout << "moved done" << endl;
 }
 
 /**

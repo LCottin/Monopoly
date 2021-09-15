@@ -21,6 +21,7 @@ class Player
 
     public:
         Player(const string name);
+        Player(const string name, const TYPES type);
         string  getName() const;
         Piece*  getPiece() const;
         int     getMoney() const;

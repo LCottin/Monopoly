@@ -73,7 +73,16 @@ Player::Player(const string name)
             type = THIMBLE;
             break;
     }
-    Piece* _Piece = new Piece(type);
+    _Piece = new Piece(type);
+}
+
+Player::Player(const string name, const TYPES piece)
+{
+    _Pseudo = name;
+    _Money  = 2000;
+    _Alive  = true;
+
+    _Piece = new Piece(piece);
 }
 
 /**
