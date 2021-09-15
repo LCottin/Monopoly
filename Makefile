@@ -1,31 +1,43 @@
-CC 		= g++
-CFLAGS 	= -std=c++14 -Wall 
-LIBS	= -lsfml-graphics -lsfml-system -lsfml-window -lm
-EXEC	= main
+#-----------------------------------------#
+#			COMPILER OPTIONS		
+#-----------------------------------------#
+CX		 = g++
+EXT		 = cpp
+CXFLAGS  = -std=c++14 -Wall -g
+LIBS	 = -lsfml-graphics -lsfml-system -lsfml-window -lm
+EXEC	 = main
+DIR_OBJS = ./bin
 
-SRC = 	./src/main.cpp \
-		./src/Dice.cpp \
-		./src/Bank.cpp \
-		./src/Piece.cpp \
-		./src/Player.cpp
+#-----------------------------------------#
+#				FILES    		
+#-----------------------------------------#
+SRC := $(shell echo src/*.$(EXT))
 
-OBJ = $(SRC:.cpp=.o)
+#notdir    : returns the file only without its folder (src/main.c 	 -> main.c)
+#basename  : returns the file withtout its suffix     (main.c     	 -> main)
+#addprefix : returns the file with its new prefix     (main 	  	 -> DIR_OBJS/main)
+#addsuffix : returns the file with its new suffix     (DIR_OBJS/main -> DIR_OBJS/main.o)
+OBJS = $(addsuffix .o, $(addprefix $(DIR_OBJS)/, $(basename $(notdir $(SRC)))))
 
+#-----------------------------------------#
+#	       	COMPILING RULES	      
+#-----------------------------------------#
 all: $(EXEC)
-	@echo  Project compiled !
+	@echo Project compiled !
 
-$(EXEC): $(OBJ) 
-	$(CC) $(CFLAGS) -o $(EXEC) $(OBJ) $(LIBS)
+$(EXEC): directory $(OBJS) 
+	$(CX) $(CXFLAGS) $(OBJS) -o $(EXEC) $(LIBS)
 
-# Builds .o's from .c's
-# It uses automatic variables 
-#	$<: the name of the prerequisite of the rule(a .c file)  
-#	$@: the name of the target of the rule (a .o file) 
-.cpp.o:
-	$(CC) $(CFLAGS) -c $<  -o $@
+# Builds .o's from .cpp's using automatic variables 
+#	$<: the name of the prerequisite of the rule -> .cpp file 
+#	$@: the name of the target of the rule 		 -> .o file
+$(DIR_OBJS)/%.o : ./src/%.$(EXT)
+	$(CX) $(CXFLAGS) -c $? -o $@
+
+directory:
+	mkdir -p $(DIR_OBJS)/
 
 clean:
-	rm -rf ./src/*.o
+	rm -rf $(DIR_OBJS)
 	rm $(EXEC)
-	@echo Files deleted
-
+	@echo Files deleted, project clean.
