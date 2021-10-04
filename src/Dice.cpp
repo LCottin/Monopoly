@@ -25,27 +25,27 @@ int Dice::roll()
     switch (random)
     {
         case 1:
-            _Texture.loadFromFile("./Images/Dice/dice1.png");
+            _Texture.loadFromFile("./Images/Dices/dice1.png");
             break;
         
         case 2:
-            _Texture.loadFromFile("./Images/Dice/dice2.png");
+            _Texture.loadFromFile("./Images/Dices/dice2.png");
             break;
 
         case 3:
-            _Texture.loadFromFile("./Images/Dice/dice3.png");
+            _Texture.loadFromFile("./Images/Dices/dice3.png");
             break;
 
         case 4:
-            _Texture.loadFromFile("./Images/Dice/dice4.png");
+            _Texture.loadFromFile("./Images/Dices/dice4.png");
             break;
 
         case 5:
-            _Texture.loadFromFile("./Images/Dice/dice5.png");
+            _Texture.loadFromFile("./Images/Dices/dice5.png");
             break;
 
         case 6:
-            _Texture.loadFromFile("./Images/Dice/dice6.png");
+            _Texture.loadFromFile("./Images/Dices/dice6.png");
             break;
 
         default:
