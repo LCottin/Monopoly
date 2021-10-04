@@ -18,16 +18,18 @@ int main(int argc, char const *argv[])
 {
     //Dice creation
     Dice d;
-    Player* pl = new Player("Test");
+    Player* pl = new Player("Test", CAR);
 
-    Texture font;
-    font.loadFromFile("./Images/font.png");
-    
-    Sprite bg;
+    Texture font, font2;
+    font.loadFromFile("./Images/Boards/game.png");
+    font2.loadFromFile("./Images/test2.png");
+
+    Sprite bg, bg2;
     bg.setTexture(font);
+    bg2.setTexture(font2);
 
     //Creation of a window to try drawing the dice
-    RenderWindow window(VideoMode(600, 600), "try");
+    RenderWindow window(VideoMode(800, 800), "try");
     window.setFramerateLimit(5);
 
     while (window.isOpen())
@@ -44,13 +46,15 @@ int main(int argc, char const *argv[])
         
         window.clear();
         window.draw(bg);
+        window.draw(bg2);
 
+        /*
         d.roll();
         window.draw(*d.getSprite());
         
         pl->getPiece()->move(Vector2f(100, 100));
         window.draw(*pl->getPiece()->getSprite());
-
+        */
         window.display();
     }
 
