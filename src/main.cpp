@@ -45,7 +45,7 @@ int main(int argc, char const *argv[])
             {
                 window.close();
             }
-        }
+        } 
         
         window.clear();
         window.draw(bg);
