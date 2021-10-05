@@ -5,10 +5,11 @@
  */
 Communities::Communities() : Cards()
 {
-    _Cards = 16;
-
     _MainTexture.loadFromFile("./Images/Communities/com.png");
     _MainSprite.setTexture(_MainTexture);
+    _MainSprite.setPosition(Vector2f(358, 200));
+    _MainSprite.setRotation(135);
+    _MainSprite.setScale(_Scale);
 }
 
 Sprite* Communities::drawCard()

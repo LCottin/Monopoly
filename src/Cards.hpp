@@ -12,7 +12,6 @@
 
 #include "SFML/Graphics.hpp"
 #include "SFML/Window.hpp"
-#include "PIECETYPES.hpp"
 
 using namespace std;
 using namespace sf;
@@ -32,10 +31,14 @@ class Cards
         Texture _OtherTexture;
         Sprite _OtherSprite;
 
+        //cards scale
+        Vector2f _Scale;
+
     public:
-        Cards() {};
+        Cards();
+        Sprite* getMainSprite();
         virtual Sprite* drawCard() = 0;
-        ~Cards() {};
+        ~Cards();
 };
 
 
