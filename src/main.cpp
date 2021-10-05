@@ -10,27 +10,30 @@
 #include "Dice.hpp"
 #include "Piece.hpp"
 #include "Player.hpp"
+#include "Communities.hpp"
+#include "Chances.hpp"
 
 using namespace std;
 using namespace sf;
 
 int main(int argc, char const *argv[])
 {
-    //Dice creation
-    Dice d;
-    Player* pl = new Player("Test", CAR);
-
-    Texture font, font2;
-    font.loadFromFile("./Images/Boards/game.png");
-    font2.loadFromFile("./Images/test2.png");
-
-    Sprite bg, bg2;
-    bg.setTexture(font);
-    bg2.setTexture(font2);
-
     //Creation of a window to try drawing the dice
     RenderWindow window(VideoMode(800, 800), "try");
     window.setFramerateLimit(5);
+
+    //creation
+    Dice d;
+    Player* pl = new Player("Test", CAR);
+    Communities com;
+    Chances ch;
+    
+    Texture font;
+    font.loadFromFile("./Images/Boards/monopoly.png");
+    
+    Sprite bg;
+    bg.setTexture(font);
+
 
     while (window.isOpen())
     {
@@ -46,8 +49,9 @@ int main(int argc, char const *argv[])
         
         window.clear();
         window.draw(bg);
-        window.draw(bg2);
-
+        window.draw(*com.getMainSprite());
+        window.draw(*ch.getMainSprite());
+        ch.drawCard();
         /*
         d.roll();
         window.draw(*d.getSprite());
