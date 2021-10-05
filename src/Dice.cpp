@@ -16,10 +16,9 @@ int Dice::roll()
     //generates a pseudo random number between 1 and 6
     random_device dev;
     mt19937 rng(dev());
-    uniform_int_distribution<mt19937::result_type> dist6(1,6); // distribution in range [1, 6]
+    uniform_int_distribution<mt19937::result_type> dist6(1, 6); // distribution in range [1, 6]
 
     int random = dist6(rng);
-    cout << dist6(rng) << endl;
 
     //sets correct texture according to the number generated
     switch (random)
