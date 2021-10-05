@@ -5,10 +5,11 @@
  */
 Chances::Chances() : Cards()
 {
-    _Cards = 16;
-
     _MainTexture.loadFromFile("./Images/Chances/chance.png");
     _MainSprite.setTexture(_MainTexture);
+    _MainSprite.setPosition(Vector2f(442, 603));
+    _MainSprite.setRotation(315);
+    _MainSprite.setScale(_Scale);
 }
 
 Sprite* Chances::drawCard()
@@ -28,7 +29,10 @@ Sprite* Chances::drawCard()
     //saves the info about the number of the card
     _Numbers.push_back(random);
     if (_Numbers.size() == _Cards)
+    {
         _Numbers.clear();
+        cout << "Cleared" << endl;
+    }
 
     //opens the right file
     string path = "./Images/Chances/chance" + to_string(random) + ".png";
