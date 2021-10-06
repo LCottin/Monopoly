@@ -12,6 +12,10 @@ Communities::Communities() : Cards()
     _MainSprite.setScale(_Scale);
 }
 
+/**
+ * Draws a card randomly, saves it and returns the sprite associated
+ * @returns The sprite of the card 
+ */
 Sprite* Communities::drawCard()
 {
     //generates a pseudo random number between 1 and Cards

@@ -1,7 +1,7 @@
 #include "Player.hpp"
 
 /**
- * Constructor
+ * Default constructor
  */
 Player::Player(const string name)
 {
@@ -104,7 +104,7 @@ Piece* Player::getPiece() const
 }
 
 /**
- * Show the player's money
+ * Shows the player's money
  * @returns Player's current amout of money
  */
 int Player::getMoney() const
@@ -122,7 +122,7 @@ bool Player::getStatus() const
 }
 
 /**
- * Destructor
+ * Default destructor
  */
 Player::~Player()
 {

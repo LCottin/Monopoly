@@ -18,7 +18,7 @@ int Bank::getAmout() const
 }
 
 /**
- * Take money from the bank
+ * Takes money from the bank
  * @param amout Money to take
  */
 void Bank::take(const int amout)
@@ -27,7 +27,7 @@ void Bank::take(const int amout)
 }
 
 /**
- * Give money to the bank
+ * Gives money to the bank
  * @param amout Money to give
  */
 void Bank::give(const int amout)
