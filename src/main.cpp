@@ -20,7 +20,7 @@ int main(int argc, char const *argv[])
 {
     //Creation of a window to try drawing the dice
     RenderWindow window(VideoMode(800, 800), "try");
-    window.setFramerateLimit(5);
+    window.setFramerateLimit(50);
 
     //creation
     Dice d;
@@ -52,13 +52,13 @@ int main(int argc, char const *argv[])
         window.draw(*com.getMainSprite());
         window.draw(*ch.getMainSprite());
         ch.drawCard();
-        /*
+        
         d.roll();
         window.draw(*d.getSprite());
         
         pl->getPiece()->move(Vector2f(100, 100));
         window.draw(*pl->getPiece()->getSprite());
-        */
+        
         window.display();
     }
 

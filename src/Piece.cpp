@@ -92,7 +92,6 @@ void Piece::setScale(const double newScale)
  */
 Sprite* Piece::getSprite()
 {
-    cout << "get sprite" << endl;
     return &_Sprite;
 }
 
@@ -120,11 +119,8 @@ Vector2f Piece::getPosition() const
  */
 void Piece::move(const Vector2f newPos)
 {
-    cout << "Begin move" << endl;
     _Sprite.setPosition(newPos);
-    cout << "moved sprite" << endl;
     _Position = newPos;
-    cout << "moved done" << endl;
 }
 
 /**
