@@ -5,9 +5,10 @@
  */
 Player::Player(const string name)
 {
-    _Pseudo = name;
-    _Money  = 2000;
-    _Alive  = true;
+    _Pseudo     = name;
+    _Money      = 2000;
+    _Alive      = true;
+    _Position   = 0;
 
     string answer;
     TYPES type;
@@ -78,9 +79,10 @@ Player::Player(const string name)
 
 Player::Player(const string name, const TYPES piece)
 {
-    _Pseudo = name;
-    _Money  = 2000;
-    _Alive  = true;
+    _Pseudo     = name;
+    _Money      = 2000;
+    _Alive      = true;
+    _Position   = 0;
 
     _Piece = new Piece(piece);
 }
@@ -113,12 +115,50 @@ int Player::getMoney() const
 }
 
 /**
+ * Shows the player's position
+ * @returns Player's current position
+ */
+int Player::getPosition() const
+{
+    return _Position;
+}
+
+/**
  * Tells if the payer is still alive
  * @returns True if he's alive, else false
  */
 bool Player::getStatus() const
 {
     return _Alive;
+}
+
+/**
+ * Each time a player pass go, it receives $200 from the bank
+ * @param bank Bank of the game
+ */
+void Player::go(Bank& bank)
+{
+    bank.output(200);
+    _Money += 200;
+}
+
+/**
+ * Player rolls the dice
+ * @returns The sprite of the number
+ */
+Sprite* Player::roll()
+{
+    Dice d;
+    _RollDice = d.roll();
+    return d.getSprite();
+}
+
+/**
+ * Moves the player on the board
+ */
+void Player::move()
+{
+    _Position = (_Position + _RollDice) % 40;
 }
 
 /**
