@@ -13,8 +13,8 @@ class Bank
     public:
         Bank();
         int getAmout() const;
-        void take(const int amout);
-        void give(const int amout);
+        void input(const int amout);
+        bool output(const int amout);
         ~Bank();
 };
 
