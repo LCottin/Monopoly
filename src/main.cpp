@@ -12,12 +12,17 @@
 #include "Player.hpp"
 #include "Communities.hpp"
 #include "Chances.hpp"
+#include "Game.hpp"
 
 using namespace std;
 using namespace sf;
 
 int main(int argc, char const *argv[])
 {
+    Game g;
+    g.getNbPlayers();
+    g.playGame();
+/*
     //Creation of a window to try drawing the dice
     RenderWindow window(VideoMode(800, 800), "try");
     window.setFramerateLimit(50);
@@ -63,6 +68,7 @@ int main(int argc, char const *argv[])
     }
 
     delete pl;
+*/
     cout << "Runned main" << endl;
     return 0;
 }
