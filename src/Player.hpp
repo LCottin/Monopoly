@@ -22,6 +22,7 @@ class Player
         Piece*  _Piece;
         int     _Money;
         bool    _Alive;
+        bool    _InJail;
         int     _Position;
         int     _Roll1, _Roll2;
 
@@ -33,9 +34,10 @@ class Player
         int     getMoney() const;
         int     getPosition() const;
         bool    getStatus() const;
+        bool    isInJail() const;
         void    go(Bank& bank);
         void    rollDices(RenderWindow& window, Dice* d1, Dice* d2);
-        void    move();
+        bool    move();
     
         ~Player();
 };
