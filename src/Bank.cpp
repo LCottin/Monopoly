@@ -20,17 +20,24 @@ int Bank::getAmout() const
 /**
  * Takes money from the bank
  * @param amout Money to take
+ * @returns true if the bank is empty, else false
  */
-void Bank::take(const int amout)
+bool Bank::output(const int amout)
 {
     _Amount -= amout;
+    if (_Amount < 0)
+    {
+        _Amount = 0;
+        return true;
+    }
+    return false;
 }
 
 /**
  * Gives money to the bank
  * @param amout Money to give
  */
-void Bank::give(const int amout)
+void Bank::input(const int amout)
 {
     _Amount += amout;
 }

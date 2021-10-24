@@ -33,10 +33,7 @@ Sprite* Chances::drawCard()
     //saves the info about the number of the card
     _Numbers.push_back(random);
     if (_Numbers.size() == _Cards)
-    {
         _Numbers.clear();
-        cout << "Cleared" << endl;
-    }
 
     //opens the right file
     string path = "./Images/Chances/chance" + to_string(random) + ".png";

@@ -67,6 +67,15 @@ Sprite* Dice::getSprite()
 }
 
 /**
+ * Changes the position of the sprite
+ * @param pos Vector containing the new position
+ */
+void Dice::setPosition(const Vector2f pos)
+{
+    _Sprite.setPosition(pos);
+}
+
+/**
  * Default destructor
  */
 Dice::~Dice()

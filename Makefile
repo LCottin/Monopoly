@@ -2,11 +2,11 @@
 #			COMPILER OPTIONS		
 #-----------------------------------------#
 CX		 = g++
-EXT		 = cpp
 CXFLAGS  = -std=c++14 -Wall
+EXT		 = cpp
 LIBS	 = -lsfml-graphics -lsfml-system -lsfml-window -lm
-EXEC	 = main
 DIR_OBJS = ./bin
+EXEC	 = main
 
 #-----------------------------------------#
 #				FILES    		
@@ -26,18 +26,17 @@ all: $(EXEC)
 	@echo Project compiled !
 
 $(EXEC): directory $(OBJS) 
-	$(CX) $(CXFLAGS) $(OBJS) -o $(EXEC) $(LIBS)
+	$(CX) $(CXFLAGS) $(OBJS) -o $(DIR_OBJS)/$(EXEC) $(LIBS)
 
 # Builds .o's from .cpp's using automatic variables 
 #	$<: the name of the prerequisite of the rule -> .cpp file 
 #	$@: the name of the target of the rule 		 -> .o file
 $(DIR_OBJS)/%.o : ./src/%.$(EXT)
-	$(CX) $(CXFLAGS) -c $? -o $@
+	$(CX) $(CXFLAGS) -c $< -o $@
 
 directory:
 	mkdir -p $(DIR_OBJS)/
 
 clean:
 	rm -rf $(DIR_OBJS)
-	rm $(EXEC)
 	@echo Files deleted, project clean.
