@@ -6,9 +6,12 @@
 Game::Game()
 {
     _Window.create(VideoMode(800, 800), "Monopoly game !");
+    _Window.setFramerateLimit(10);
 
     _NbPlayers      = -1;
     _CurrentTurn    = 0;
+    _Dice1          = new Dice();
+    _Dice2          = new Dice();
 }
 
 /**
@@ -49,13 +52,20 @@ void Game::getNbPlayers()
     cout << "Let the game begin ! " << endl;
 }
 
+
+
 /**
  * Main function, plays the game
  */
 bool Game::playGame()
 {
+    getNbPlayers();
+
     while (_Window.isOpen())
     {
+        _CurrentTurn    = (_CurrentTurn + 1) % _NbPlayers;
+        _CurrentPlayer  = _Players[_CurrentTurn];
+        
         Event event;
 
         while (_Window.pollEvent(event))
@@ -68,7 +78,9 @@ bool Game::playGame()
 
         _Window.clear();
         _Window.draw(*board.getSprite());
+        _CurrentPlayer->rollDices(_Window, _Dice1, _Dice2);
         _Window.display();
+        return true;
     }
     return true;
 }
@@ -82,5 +94,6 @@ Game::~Game()
     {
         delete _Players[i];
     }
-    delete _CurrentPlayer;
+    delete _Dice1;
+    delete _Dice2;
 }
