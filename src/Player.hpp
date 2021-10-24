@@ -10,8 +10,10 @@
 #include "Piece.hpp"
 #include "Bank.hpp"
 #include "Dice.hpp"
+#include "Board.hpp"
 
 using namespace std;
+using namespace sf;
 
 class Player
 {
@@ -21,7 +23,7 @@ class Player
         int     _Money;
         bool    _Alive;
         int     _Position;
-        int     _RollDice;
+        int     _Roll1, _Roll2;
 
     public:
         Player(const string name);
@@ -32,7 +34,7 @@ class Player
         int     getPosition() const;
         bool    getStatus() const;
         void    go(Bank& bank);
-        Sprite* roll();
+        void    rollDices(RenderWindow& window, Dice* d1, Dice* d2);
         void    move();
     
         ~Player();

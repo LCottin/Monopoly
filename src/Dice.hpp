@@ -22,6 +22,7 @@ class Dice
         Dice();
         int roll();
         Sprite* getSprite();
+        void    setPosition(const Vector2f pos);
         ~Dice();
 };
 

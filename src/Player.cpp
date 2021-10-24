@@ -143,22 +143,39 @@ void Player::go(Bank& bank)
 }
 
 /**
- * Player rolls the dice
- * @returns The sprite of the number
- */
-Sprite* Player::roll()
-{
-    Dice d;
-    _RollDice = d.roll();
-    return d.getSprite();
-}
-
-/**
  * Moves the player on the board
  */
 void Player::move()
 {
-    _Position = (_Position + _RollDice) % 40;
+    //TODO: return true when crossing go, else false
+    _Position = (_Position + _Roll1 + _Roll2) % 40;
+}
+
+/**
+ * Rolls both dices and prints the animation on the screen
+ */
+void Player::rollDices(RenderWindow& window, Dice* d1, Dice* d2)
+{
+    //1 : changes framerate 
+    window.setFramerateLimit(10);
+    //2 : rolls dices to animate screen
+    for (size_t i = 0; i < 20; i++)
+    {
+        _Roll1 = d1->roll();
+        _Roll2 = d2->roll();
+
+        d1->setPosition(Vector2f(50, 250));
+        d2->setPosition(Vector2f(450, 250));
+
+        //TODO: Create an image out of focus to draw when dices are rolling
+        window.clear();
+        window.draw(*board.getSprite());
+        window.draw(*d1->getSprite());
+        window.draw(*d2->getSprite());
+
+        window.display();
+    }
+    
 }
 
 /**
