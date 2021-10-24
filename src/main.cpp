@@ -20,8 +20,9 @@ using namespace sf;
 int main(int argc, char const *argv[])
 {
     Game g;
-    g.getNbPlayers();
+    //g.getNbPlayers();
     g.playGame();
+    //g.rollDices();
 /*
     //Creation of a window to try drawing the dice
     RenderWindow window(VideoMode(800, 800), "try");
