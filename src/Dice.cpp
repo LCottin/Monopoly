@@ -5,6 +5,30 @@
  */
 Dice::Dice()
 {
+    //creates all textures
+    Texture t1;
+    t1.loadFromFile("./Images/Dices/dice1.png");
+    _Textures.push_back(t1);
+
+    Texture t2;
+    t2.loadFromFile("./Images/Dices/dice2.png");
+    _Textures.push_back(t2);
+
+    Texture t3;
+    t3.loadFromFile("./Images/Dices/dice3.png");
+    _Textures.push_back(t3);
+
+    Texture t4;
+    t4.loadFromFile("./Images/Dices/dice4.png");
+    _Textures.push_back(t4);
+
+    Texture t5;
+    t5.loadFromFile("./Images/Dices/dice5.png");
+    _Textures.push_back(t5);
+
+    Texture t6;
+    t6.loadFromFile("./Images/Dices/dice6.png");
+    _Textures.push_back(t6);
 }
 
 /**
@@ -21,38 +45,7 @@ int Dice::roll()
     int random = dist6(rng);
 
     //sets correct texture according to the number generated
-    switch (random)
-    {
-        case 1:
-            _Texture.loadFromFile("./Images/Dices/dice1.png");
-            break;
-        
-        case 2:
-            _Texture.loadFromFile("./Images/Dices/dice2.png");
-            break;
-
-        case 3:
-            _Texture.loadFromFile("./Images/Dices/dice3.png");
-            break;
-
-        case 4:
-            _Texture.loadFromFile("./Images/Dices/dice4.png");
-            break;
-
-        case 5:
-            _Texture.loadFromFile("./Images/Dices/dice5.png");
-            break;
-
-        case 6:
-            _Texture.loadFromFile("./Images/Dices/dice6.png");
-            break;
-
-        default:
-            break;
-    }
-
-    //sets sprite and position
-    _Sprite.setTexture(_Texture);
+    _Sprite.setTexture(_Textures[random - 1]);
     _Sprite.setPosition(Vector2f(0, 0));
     return random;
 }
@@ -63,6 +56,16 @@ int Dice::roll()
  */
 Sprite* Dice::getSprite()
 {
+    return &_Sprite;
+}
+
+/**
+ * Gets the sprite of the dice according to its face
+ * @returns The sprite to draw 
+ */
+Sprite* Dice::getSprite(const int i)
+{
+    _Sprite.setTexture(_Textures[i - 1]);
     return &_Sprite;
 }
 
