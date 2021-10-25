@@ -157,7 +157,7 @@ void Player::go(Bank& bank)
  */
 bool Player::move()
 {
-    int newPos = (_Position + _Roll1 + _Roll2) % 40;
+    int newPos = (_Position + _Rolls[0] + _Rolls[1]) % 40;
     
     if (newPos < _Position)
     {
@@ -171,36 +171,13 @@ bool Player::move()
 
 /**
  * Rolls both dices and prints the animation on the screen
+ * @returns Array with two numbers
  */
-void Player::rollDices(RenderWindow& window, Dice* d1, Dice* d2)
+int* Player::rollDices(Dice* d1, Dice* d2)
 {
-    //1 : rolls dices to animate screen
-    for (size_t i = 0; i < 20; i++)
-    {
-        //2 : changes framerate 
-        window.setFramerateLimit(20 - i);
-        
-        _Roll1 = d1->roll();
-        _Roll2 = d2->roll();
-
-        d1->setPosition(Vector2f(50, 250));
-        d2->setPosition(Vector2f(450, 250));
-
-        //TODO: Create an image out of focus to draw when dices are rolling
-        window.clear();
-        window.draw(*board.getOtherSprite());
-        window.draw(*d1->getSprite());
-        window.draw(*d2->getSprite());
-        window.display();
-
-        //sleeps to slow down 
-        sleep(milliseconds(100));
-    }
-    //sleeps for two seconds
-    sleep(milliseconds(2000));
-
-    //3 : sets back framerate
-    window.setFramerateLimit(10);
+    _Rolls[0] = d1->roll();
+    _Rolls[1] = d2->roll();
+    return _Rolls;
 }
 
 /**

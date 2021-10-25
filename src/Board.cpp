@@ -48,6 +48,57 @@ void Board::drawPieces(RenderWindow& window, vector<Player*> players)
 }
 
 /**
+ * Prints animation when dices are rolling
+ * @param
+ */
+void Board::drawRolls(RenderWindow& window, const int* rolls)
+{
+    //creates two artifial dices
+    Dice* d1 = new Dice();
+    Dice* d2 = new Dice();
+
+    //1 : rolls dices to animate screen
+    for (size_t i = 0; i < 20; i++)
+    {
+        //2 : changes framerate 
+        window.setFramerateLimit(20 - i);
+        
+        d1->roll();
+        d2->roll();
+
+        d1->setPosition(Vector2f(50, 250));
+        d2->setPosition(Vector2f(450, 250));
+
+        window.clear();
+        window.draw(_FocusSprite);
+        window.draw(*d1->getSprite());
+        window.draw(*d2->getSprite());
+        window.display();
+
+        //sleeps to slow down 
+        sleep(milliseconds(100));
+    }
+    //3 : sets back framerate
+    window.setFramerateLimit(10);
+
+    //4 : prints real numbers 
+    d1->setPosition(Vector2f(50, 250));
+    d2->setPosition(Vector2f(450, 250));
+
+    window.clear();
+    window.draw(_FocusSprite);
+    window.draw(*d1->getSprite(rolls[0]));
+    window.draw(*d2->getSprite(rolls[1]));
+    window.display();
+
+    //sleeps for three seconds
+    sleep(Time(milliseconds(3000)));
+
+    delete d1;
+    delete d2;
+}
+
+/**
  * Prints one piece on the board after being tested
  * @param window Window to update
  * @param player Player owning the piece

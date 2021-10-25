@@ -25,6 +25,7 @@ class Board
         Sprite* getSprite();
         Sprite* getOtherSprite();
         void    drawPieces(RenderWindow& window, vector<Player*> players);
+        void    drawRolls(RenderWindow& window, const int* rolls);
         ~Board();
 };
 

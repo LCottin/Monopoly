@@ -10,7 +10,6 @@
 #include "Piece.hpp"
 #include "Bank.hpp"
 #include "Dice.hpp"
-#include "Board.hpp"
 
 using namespace std;
 using namespace sf;
@@ -24,7 +23,7 @@ class Player
         bool    _Alive;
         bool    _InJail;
         int     _Position;
-        int     _Roll1, _Roll2;
+        int     _Rolls[2];
 
     public:
         Player(const string name);
@@ -36,7 +35,7 @@ class Player
         bool    getStatus() const;
         bool    isInJail() const;
         void    go(Bank& bank);
-        void    rollDices(RenderWindow& window, Dice* d1, Dice* d2);
+        int*    rollDices(Dice* d1, Dice* d2);
         bool    move();
     
         ~Player();

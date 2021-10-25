@@ -82,10 +82,13 @@ bool Game::playGame()
         _Window.clear();
         _Window.draw(*board.getSprite());
 
+        sleep(milliseconds(2000));
+
         /* --------------------------- */
         /* STEP 1 : player rolls dices */
         /* --------------------------- */
-        _CurrentPlayer->rollDices(_Window, _Dice1, _Dice2);
+        int* rolls = _CurrentPlayer->rollDices(_Dice1, _Dice2);
+        board.drawRolls(_Window, rolls);
 
         /* --------------------------- */
         /* STEP 2 : player moves piece */
