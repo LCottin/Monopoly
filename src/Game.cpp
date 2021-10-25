@@ -18,14 +18,7 @@ Game::Game()
  * Tells how many players will plays the game
  */
 void Game::getNbPlayers()
-{
-    //Stores available piece so that each player has a different one
-    vector<int> availableTypes;
-    for (size_t i = 0; i < 11; i++)
-    {
-        availableTypes.push_back(i);
-    }
-    
+{    
     // cout << "How many players will play ? " << endl;
     // do
     // {
@@ -55,8 +48,6 @@ void Game::getNbPlayers()
     cout << "Let the game begin ! " << endl;
 }
 
-
-
 /**
  * Main function, plays the game
  */
@@ -68,7 +59,7 @@ bool Game::playGame()
     {
         _CurrentTurn    = (_CurrentTurn + 1) % _NbPlayers;
         _CurrentPlayer  = _Players[_CurrentTurn];
-        
+        cout << _CurrentPlayer->getName() << endl;
         Event event;
 
         while (_Window.pollEvent(event))
@@ -84,25 +75,32 @@ bool Game::playGame()
 
         sleep(milliseconds(2000));
 
+        board.drawPieces(_Window, _Players);
+
         /* --------------------------- */
         /* STEP 1 : player rolls dices */
         /* --------------------------- */
         int* rolls = _CurrentPlayer->rollDices(_Dice1, _Dice2);
+
+        /* ------------------------------------- */
+        /* STEP 2 : prints rolling on the screen */
+        /* ------------------------------------- */
         board.drawRolls(_Window, rolls);
 
         /* --------------------------- */
-        /* STEP 2 : player moves piece */
+        /* STEP 3 : player moves piece */
         /* --------------------------- */
         bool go = _CurrentPlayer->move();
         if (go)
             _CurrentPlayer->go(_Bank);
 
         /* -------------------------------------- */
-        /* STEP 3 : updates position on the board */
+        /* STEP 4 : updates position on the board */
         /* -------------------------------------- */
-            
+        board.drawPieces(_Window, _Players);
 
         _Window.display();
+        
         return true;
     }
     return true;
