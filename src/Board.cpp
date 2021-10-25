@@ -29,27 +29,9 @@ Sprite* Board::getOtherSprite()
 }
 
 /**
- * Prints each player's piece on the board
- * @param window Window to update
- * @param players Vector containing every player
- */
-void Board::drawPieces(RenderWindow& window, vector<Player*> players)
-{
-    //prints each player's piece on the board
-    for (size_t i = 0; i < players.size(); i++)
-    {
-        //moves the piece ...
-        movePiece(window, players[i]);
-
-        //...then displays it
-        window.draw(*players[i]->getPiece()->getSprite());
-    }
-    window.display();
-}
-
-/**
  * Prints animation when dices are rolling
- * @param
+ * @param window Window to update
+ * @param rolls Array with the result of the rolling
  */
 void Board::drawRolls(RenderWindow& window, const int* rolls)
 {
@@ -92,10 +74,30 @@ void Board::drawRolls(RenderWindow& window, const int* rolls)
     window.display();
 
     //sleeps for three seconds
-    sleep(Time(milliseconds(3000)));
+    sleep(seconds(3));
 
     delete d1;
     delete d2;
+}
+
+/**
+ * Prints each player's piece on the board
+ * @param window Window to update
+ * @param players Vector containing every player
+ */
+void Board::drawPieces(RenderWindow& window, vector<Player*> players)
+{
+    //prints each player's piece on the board
+    for (size_t i = 0; i < players.size(); i++)
+    {
+        //moves the piece ...
+        movePiece(window, players[i]);
+
+        //...then displays it
+        window.draw(*players[i]->getPiece()->getSprite());
+    }
+    window.display();
+    sleep(seconds(2));
 }
 
 /**
@@ -112,40 +114,40 @@ void Board::movePiece(RenderWindow& window, Player* player)
     {
         //last line
         case 0:
-            piece->move(Vector2f(750, 750));
+            piece->move(Vector2f(730, 730));
             break;
         case 1:
-            piece->move(Vector2f(660, 750));
+            piece->move(Vector2f(660, 730));
             break;
         case 2:
-            piece->move(Vector2f(590, 750));
+            piece->move(Vector2f(590, 730));
             break;
         case 3:
-            piece->move(Vector2f(520, 750));
+            piece->move(Vector2f(520, 730));
             break;
         case 4:
-            piece->move(Vector2f(460, 750));
+            piece->move(Vector2f(460, 730));
             break;
         case 5:
-            piece->move(Vector2f(400, 750));
+            piece->move(Vector2f(400, 730));
             break;
         case 6:
-            piece->move(Vector2f(330, 750));
+            piece->move(Vector2f(330, 730));
             break;
         case 7:
-            piece->move(Vector2f(270, 750));
+            piece->move(Vector2f(270, 730));
             break;
         case 8:
-            piece->move(Vector2f(205, 750));
+            piece->move(Vector2f(205, 730));
             break;
         case 9:
-            piece->move(Vector2f(140, 750));
+            piece->move(Vector2f(140, 730));
             break;
         case 10:
             if (player->isInJail())
                 piece->move(Vector2f(60, 730));
             else    
-                piece->move(Vector2f(15, 780));
+                piece->move(Vector2f(15, 760));
             break;
 
         //first row
