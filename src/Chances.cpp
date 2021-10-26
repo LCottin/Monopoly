@@ -9,7 +9,11 @@ Chances::Chances() : Cards()
     _MainSprite.setTexture(_MainTexture);
     _MainSprite.setPosition(Vector2f(442, 603));
     _MainSprite.setRotation(315);
-    _MainSprite.setScale(_Scale);
+    
+    _FocusTexture.loadFromFile("./Images/Chances/chance_focus.png");
+    _FocusSprite.setTexture(_FocusTexture);
+    _FocusSprite.setPosition(Vector2f(442, 603));
+    _FocusSprite.setRotation(315);
 }
 
 /**
