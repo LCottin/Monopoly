@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <random>
+#include <vector>
 #include "SFML/Graphics.hpp"
 
 using namespace std;
@@ -16,12 +17,13 @@ class Dice
 {
     private:
         Sprite  _Sprite;
-        Texture _Texture;
+        vector<Texture> _Textures;
         
     public:
         Dice();
         int roll();
         Sprite* getSprite();
+        Sprite* getSprite(const int i);
         void    setPosition(const Vector2f pos);
         ~Dice();
 };

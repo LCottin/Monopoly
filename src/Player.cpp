@@ -124,6 +124,15 @@ int Player::getPosition() const
 }
 
 /**
+ * Tells if the player is in jail
+ * @returns true if it is, else false
+ */
+bool Player::isInJail() const
+{
+    return _InJail;
+}
+
+/**
  * Tells if the payer is still alive
  * @returns True if he's alive, else false
  */
@@ -144,38 +153,31 @@ void Player::go(Bank& bank)
 
 /**
  * Moves the player on the board
+ * @returns true if the player comes across go, else false
  */
-void Player::move()
+bool Player::move()
 {
-    //TODO: return true when crossing go, else false
-    _Position = (_Position + _Roll1 + _Roll2) % 40;
+    int newPos = (_Position + _Rolls[0] + _Rolls[1]) % 40;
+    
+    if (newPos < _Position)
+    {
+        _Position = newPos;
+        return true;
+    }
+
+    _Position = newPos;
+    return false;
 }
 
 /**
  * Rolls both dices and prints the animation on the screen
+ * @returns Array with two numbers
  */
-void Player::rollDices(RenderWindow& window, Dice* d1, Dice* d2)
+int* Player::rollDices(Dice* d1, Dice* d2)
 {
-    //1 : changes framerate 
-    window.setFramerateLimit(10);
-    //2 : rolls dices to animate screen
-    for (size_t i = 0; i < 20; i++)
-    {
-        _Roll1 = d1->roll();
-        _Roll2 = d2->roll();
-
-        d1->setPosition(Vector2f(50, 250));
-        d2->setPosition(Vector2f(450, 250));
-
-        //TODO: Create an image out of focus to draw when dices are rolling
-        window.clear();
-        window.draw(*board.getSprite());
-        window.draw(*d1->getSprite());
-        window.draw(*d2->getSprite());
-
-        window.display();
-    }
-    
+    _Rolls[0] = d1->roll();
+    _Rolls[1] = d2->roll();
+    return _Rolls;
 }
 
 /**

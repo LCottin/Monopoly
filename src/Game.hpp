@@ -7,7 +7,6 @@
 
 #include "Board.hpp"
 #include "Player.hpp"
-#include "Dice.hpp"
 
 using namespace std;
 
@@ -17,7 +16,10 @@ class Game
         RenderWindow    _Window;
         vector<Player*> _Players;
         Player*         _CurrentPlayer;
-        Dice*           _Dice1, _Dice2;
+        Dice*           _Dice1;
+        Dice *          _Dice2;
+        Board*          _Board;
+        Bank            _Bank;
 
         int             _NbPlayers;
         int             _CurrentTurn;
@@ -28,8 +30,5 @@ class Game
         bool playGame();
         ~Game();
 };
-
-
-
 
 #endif
