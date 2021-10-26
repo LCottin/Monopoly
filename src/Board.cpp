@@ -39,6 +39,10 @@ void Board::drawRolls(RenderWindow& window, const int* rolls)
     Dice* d1 = new Dice();
     Dice* d2 = new Dice();
 
+    //Creates two artificial cards
+    Chances ch;
+    Communities com;
+
     //1 : rolls dices to animate screen
     for (size_t i = 0; i < 20; i++)
     {
@@ -53,6 +57,8 @@ void Board::drawRolls(RenderWindow& window, const int* rolls)
 
         window.clear();
         window.draw(_FocusSprite);
+        window.draw(*ch.getFocusSprite());
+        window.draw(*com.getFocusSprite());
         window.draw(*d1->getSprite());
         window.draw(*d2->getSprite());
         window.display();
@@ -69,6 +75,8 @@ void Board::drawRolls(RenderWindow& window, const int* rolls)
 
     window.clear();
     window.draw(_FocusSprite);
+    window.draw(*ch.getFocusSprite());
+    window.draw(*com.getFocusSprite());
     window.draw(*d1->getSprite(rolls[0]));
     window.draw(*d2->getSprite(rolls[1]));
     window.display();
@@ -87,6 +95,8 @@ void Board::drawRolls(RenderWindow& window, const int* rolls)
  */
 void Board::drawPieces(RenderWindow& window, vector<Player*> players)
 {
+    //refreshes screen before adding other things
+    drawBoard(window, true, false);
     //prints each player's piece on the board
     for (size_t i = 0; i < players.size(); i++)
     {
@@ -246,6 +256,24 @@ void Board::movePiece(RenderWindow& window, Player* player)
         default:
             cout << "Piece not at the right place" << endl;
     }
+}
+
+/**
+ * Draws the board and the cards on it
+ * @param window Window to draw on
+ */
+void Board::drawBoard(RenderWindow& window, bool clear, bool display)
+{
+    Chances ch;
+    Communities com;
+
+    if (clear)
+        window.clear();
+    window.draw(_Sprite);
+    window.draw(*ch.getMainSprite());
+    window.draw(*com.getMainSprite());
+    if (display)
+        window.display();
 }
 
 /**
