@@ -34,7 +34,7 @@ class Player
         int     getPosition() const;
         bool    getStatus() const;
         bool    isInJail() const;
-        void    go(Bank& bank);
+        void    go(Bank* bank);
         int*    rollDices(Dice* d1, Dice* d2);
         bool    move();
     
