@@ -18,6 +18,7 @@ class Game
         Player*         _CurrentPlayer;
         Dice*           _Dice1;
         Dice *          _Dice2;
+        Board*          _Board;
         Bank            _Bank;
 
         int             _NbPlayers;
@@ -29,8 +30,5 @@ class Game
         bool playGame();
         ~Game();
 };
-
-
-
 
 #endif

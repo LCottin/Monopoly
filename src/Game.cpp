@@ -10,8 +10,10 @@ Game::Game()
 
     _NbPlayers      = -1;
     _CurrentTurn    = 0;
+
     _Dice1          = new Dice();
     _Dice2          = new Dice();
+    _Board          = new Board();
 }
 
 /**
@@ -71,11 +73,11 @@ bool Game::playGame()
         } 
 
         _Window.clear();
-        _Window.draw(*board.getSprite());
+        _Window.draw(*_Board->getSprite());
 
         sleep(milliseconds(2000));
 
-        board.drawPieces(_Window, _Players);
+        _Board->drawPieces(_Window, _Players);
 
         /* --------------------------- */
         /* STEP 1 : player rolls dices */
@@ -85,7 +87,7 @@ bool Game::playGame()
         /* ------------------------------------- */
         /* STEP 2 : prints rolling on the screen */
         /* ------------------------------------- */
-        board.drawRolls(_Window, rolls);
+        _Board->drawRolls(_Window, rolls);
 
         /* --------------------------- */
         /* STEP 3 : player moves piece */
@@ -97,7 +99,7 @@ bool Game::playGame()
         /* -------------------------------------- */
         /* STEP 4 : updates position on the board */
         /* -------------------------------------- */
-        board.drawPieces(_Window, _Players);
+        _Board->drawPieces(_Window, _Players);
 
         _Window.display();
         
@@ -117,4 +119,5 @@ Game::~Game()
     }
     delete _Dice1;
     delete _Dice2;
+    delete _Board;
 }

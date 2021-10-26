@@ -29,6 +29,4 @@ class Board
         ~Board();
 };
 
-static Board board;
-
 #endif
