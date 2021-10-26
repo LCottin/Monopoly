@@ -24,8 +24,8 @@ class Cards
         vector<int> _Numbers;
         
         //template cards
-        Texture _MainTexture;
-        Sprite _MainSprite;
+        Texture _MainTexture, _FocusTexture;
+        Sprite _MainSprite, _FocusSprite;
 
         //other cards
         Texture _OtherTexture;
@@ -37,8 +37,9 @@ class Cards
     public:
         Cards();
         Sprite* getMainSprite();
+        Sprite* getFocusSprite();
         virtual Sprite* drawCard() = 0;
-        virtual ~Cards() = 0;
+        virtual ~Cards();
 };
 
 
