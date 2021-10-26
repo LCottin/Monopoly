@@ -38,7 +38,7 @@ class Cards
         Cards();
         Sprite* getMainSprite();
         virtual Sprite* drawCard() = 0;
-        ~Cards();
+        virtual ~Cards() = 0;
 };
 
 
