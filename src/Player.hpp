@@ -37,6 +37,7 @@ class Player
         void    go(Bank* bank);
         int*    rollDices(Dice* d1, Dice* d2);
         bool    move();
+        void    move(const int pos);
     
         ~Player();
 };

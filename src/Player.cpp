@@ -170,6 +170,15 @@ bool Player::move()
 }
 
 /**
+ * Moves the player on the board
+ * @param pos New position on the board
+ */
+void Player::move(const int pos)
+{
+    _Position = pos;
+}
+
+/**
  * Rolls both dices and prints the animation on the screen
  * @returns Array with two numbers
  */
