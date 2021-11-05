@@ -193,7 +193,6 @@ void Board::movePiece(RenderWindow& window, Player* player)
             break;
 
         //first line
-        //TODO: continuer à partir d'ici
         case 21:
             piece->move(Vector2f(122, 15));
             break;
