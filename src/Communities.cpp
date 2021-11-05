@@ -9,7 +9,11 @@ Communities::Communities() : Cards()
     _MainSprite.setTexture(_MainTexture);
     _MainSprite.setPosition(Vector2f(358, 200));
     _MainSprite.setRotation(135);
-    _MainSprite.setScale(_Scale);
+    
+    _FocusTexture.loadFromFile("./Images/Communities/com_focus.png");
+    _FocusSprite.setTexture(_FocusTexture);
+    _FocusSprite.setPosition(Vector2f(358, 200));
+    _FocusSprite.setRotation(135);
 }
 
 /**

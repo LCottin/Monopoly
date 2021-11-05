@@ -145,9 +145,9 @@ bool Player::getStatus() const
  * Each time a player pass go, it receives $200 from the bank
  * @param bank Bank of the game
  */
-void Player::go(Bank& bank)
+void Player::go(Bank* bank)
 {
-    bank.output(200);
+    bank->output(200);
     _Money += 200;
 }
 
@@ -167,6 +167,15 @@ bool Player::move()
 
     _Position = newPos;
     return false;
+}
+
+/**
+ * Moves the player on the board
+ * @param pos New position on the board
+ */
+void Player::move(const int pos)
+{
+    _Position = pos;
 }
 
 /**

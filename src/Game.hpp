@@ -19,7 +19,9 @@ class Game
         Dice*           _Dice1;
         Dice *          _Dice2;
         Board*          _Board;
-        Bank            _Bank;
+        Bank*           _Bank;
+        Chances*        _Chances;
+        Communities*    _Communities;
 
         int             _NbPlayers;
         int             _CurrentTurn;

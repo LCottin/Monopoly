@@ -14,6 +14,9 @@ Game::Game()
     _Dice1          = new Dice();
     _Dice2          = new Dice();
     _Board          = new Board();
+    _Bank           = new Bank();
+    _Chances        = new Chances();
+    _Communities    = new Communities();
 }
 
 /**
@@ -61,7 +64,7 @@ bool Game::playGame()
     {
         _CurrentTurn    = (_CurrentTurn + 1) % _NbPlayers;
         _CurrentPlayer  = _Players[_CurrentTurn];
-        cout << _CurrentPlayer->getName() << endl;
+
         Event event;
 
         while (_Window.pollEvent(event))
@@ -72,11 +75,9 @@ bool Game::playGame()
             }
         } 
 
-        _Window.clear();
-        _Window.draw(*_Board->getSprite());
+        sleep(milliseconds(1000));
 
-        sleep(milliseconds(2000));
-
+        _Board->drawBoard(_Window);
         _Board->drawPieces(_Window, _Players);
 
         /* --------------------------- */
@@ -101,8 +102,6 @@ bool Game::playGame()
         /* -------------------------------------- */
         _Board->drawPieces(_Window, _Players);
 
-        _Window.display();
-        
         return true;
     }
     return true;
@@ -120,4 +119,7 @@ Game::~Game()
     delete _Dice1;
     delete _Dice2;
     delete _Board;
+    delete _Bank;
+    delete _Chances;
+    delete _Communities;
 }

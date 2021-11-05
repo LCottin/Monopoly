@@ -7,6 +7,9 @@ Cards::Cards()
 {
     _Cards = 16;
     _Scale = Vector2f(0.45, 0.50);
+
+    _MainSprite.setScale(_Scale);
+    _FocusSprite.setScale(_Scale);
 }
 
 /**
@@ -16,6 +19,15 @@ Cards::Cards()
 Sprite* Cards::getMainSprite()
 {
     return &_MainSprite;
+}
+
+/**
+ * Returns the out of focus sprite of a card, ie it's back
+ * @returns The out of focus sprite
+ */
+Sprite* Cards::getFocusSprite()
+{
+    return &_FocusSprite;
 }
 
 /**
