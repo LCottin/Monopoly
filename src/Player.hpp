@@ -8,6 +8,7 @@
 #include <string>
 #include <iostream>
 #include "Piece.hpp"
+#include "PLACES.hpp"
 #include "Bank.hpp"
 #include "Dice.hpp"
 

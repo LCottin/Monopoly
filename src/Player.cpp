@@ -8,7 +8,7 @@ Player::Player(const string name)
     _Pseudo     = name;
     _Money      = 2000;
     _Alive      = true;
-    _Position   = 0;
+    _Position   = GO;
 
     string answer;
     TYPES type;
@@ -82,7 +82,7 @@ Player::Player(const string name, const TYPES piece)
     _Pseudo     = name;
     _Money      = 2000;
     _Alive      = true;
-    _Position   = 0;
+    _Position   = GO;
 
     _Piece = new Piece(piece);
 }

@@ -7,6 +7,7 @@
 
 #include <string>
 #include <iostream>
+#include "PLACES.hpp"
 #include "Piece.hpp"
 #include "Dice.hpp"
 #include "Player.hpp"

@@ -123,37 +123,37 @@ void Board::movePiece(RenderWindow& window, Player* player)
     switch (pos)
     {
         //last line
-        case 0:
+        case GO:
             piece->move(Vector2f(730, 730));
             break;
-        case 1:
+        case MEDITERRANEAN_AVENUE:
             piece->move(Vector2f(638, 730));
             break;
-        case 2:
+        case COMMUNITY_CHEST_1:
             piece->move(Vector2f(575, 730));
             break;
-        case 3:
+        case BALTIC_AVENUE:
             piece->move(Vector2f(510, 730));
             break;
-        case 4:
+        case INCOME_TAX:
             piece->move(Vector2f(445, 730));
             break;
-        case 5:
+        case READING_RAILROAD:
             piece->move(Vector2f(380, 730));
             break;
-        case 6:
+        case ORIENTAL_AVENUE:
             piece->move(Vector2f(317, 730));
             break;
-        case 7:
+        case CHANCE_1:
             piece->move(Vector2f(252, 730));
             break;
-        case 8:
+        case VERMONT_AVENUE:
             piece->move(Vector2f(187, 730));
             break;
-        case 9:
+        case CONNECTICUT_AVENUE:
             piece->move(Vector2f(122, 730));
             break;
-        case 10:
+        case JAIL:
             if (player->isInJail())
                 piece->move(Vector2f(50, 700));
             else    
@@ -161,95 +161,95 @@ void Board::movePiece(RenderWindow& window, Player* player)
             break;
 
         //first row
-        case 11:
+        case ST_CHARLES_PLACE:
             piece->move(Vector2f(10, 635));
             break;
-        case 12:
+        case ELECTRIC_COMPANY:
             piece->move(Vector2f(10, 572));
             break;
-        case 13:
+        case STATES_AVENUE:
             piece->move(Vector2f(10, 505));
             break;
-        case 14:
+        case VIRGINIA_AVENUE:
             piece->move(Vector2f(10, 440));
             break;
-        case 15:
+        case PENNSYLVANIA_RAILROAD:
             piece->move(Vector2f(30, 375));
             break;
-        case 16:
+        case ST_JAMES_PLACE:
             piece->move(Vector2f(10, 310));
             break;
-        case 17:
+        case COMMUNITY_CHEST_2:
             piece->move(Vector2f(38, 245));
             break;
-        case 18:
+        case TENNESSEE_AVENUE:
             piece->move(Vector2f(10, 180));
             break;
-        case 19:
+        case NEW_YORK_AVENUE:
             piece->move(Vector2f(10, 115));
             break;
-        case 20:
+        case FREE_PARKING:
             piece->move(Vector2f(40, 30));
             break;
 
         //first line
-        case 21:
+        case KENTUCKY_AVENUE:
             piece->move(Vector2f(122, 15));
             break;
-        case 22:
+        case CHANCE_2:
             piece->move(Vector2f(187, 15));
             break;
-        case 23:
+        case INDIANA_AVENUE:
             piece->move(Vector2f(252, 15));
             break;
-        case 24:
+        case ILLINOIS_AVENUE:
             piece->move(Vector2f(317, 15));
             break;
-        case 25:
+        case B_AND_O_RAILROAD:
             piece->move(Vector2f(380, 15));
             break;
-        case 26:
+        case ATLANTIC_AVENUE:
             piece->move(Vector2f(445, 15));
             break;
-        case 27:
+        case VENTNOR_AVENUE:
             piece->move(Vector2f(510, 15));
             break;
-        case 28:
+        case WATER_WORKS:
             piece->move(Vector2f(575, 15));
             break;
-        case 29:
+        case MARVIN_GARDENS:
             piece->move(Vector2f(638, 15));
             break;
-        case 30:
+        case GO_TO_JAIL:
             piece->move(Vector2f(730, 15));
             break;
 
         //last row
-        case 31:
+        case PACIFIC_AVENUE:
             piece->move(Vector2f(730, 112));
             break;
-        case 32:
+        case NORTH_CAROLINA_AVENUE:
             piece->move(Vector2f(730, 180));
             break;
-        case 33:
+        case COMMUNITY_CHEST_3:
             piece->move(Vector2f(730, 245));
             break;
-        case 34:
+        case PENNSYLVANIA_AVENUE:
             piece->move(Vector2f(730, 310));
             break;
-        case 35:
+        case SHORT_LINE_RAILROAD:
             piece->move(Vector2f(730, 375));
             break;
-        case 36:
+        case CHANCE_3:
             piece->move(Vector2f(730, 440));
             break;
-        case 37:
+        case PARK_PLACE:
             piece->move(Vector2f(730, 505));
             break;
-        case 38:
+        case LUXURY_TAX:
             piece->move(Vector2f(730, 572));
             break;
-        case 39:
+        case BOARDWALK:
             piece->move(Vector2f(730, 635));
             break;
 
