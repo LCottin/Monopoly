@@ -43,7 +43,6 @@ enum PLACES
     WATER_WORKS             = 28,
     MARVIN_GARDENS          = 29,
 
-
     //last row
     GO_TO_JAIL              = 30,
     PACIFIC_AVENUE          = 31,

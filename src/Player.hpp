@@ -7,6 +7,7 @@
 
 #include <string>
 #include <iostream>
+#include <algorithm>
 #include "Piece.hpp"
 #include "PLACES.hpp"
 #include "Bank.hpp"
@@ -18,13 +19,16 @@ using namespace sf;
 class Player
 {
     private:
-        string  _Pseudo;
-        Piece*  _Piece;
-        int     _Money;
-        bool    _Alive;
-        bool    _InJail;
-        int     _Position;
-        int     _Rolls[2];
+        string      _Pseudo;
+        Piece*      _Piece;
+        int         _Money;
+        bool        _Alive;
+        bool        _InJail;
+        int         _Position;
+        int         _Rolls[2];
+
+        static vector<int>      _AvailablePieces;
+        static vector<string>   _AvailableNames;
 
     public:
         Player(const string name);

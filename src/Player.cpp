@@ -1,5 +1,29 @@
 #include "Player.hpp"
 
+vector<int> Player::_AvailablePieces = {BARROW, 
+                                        BASEBALL,
+                                        CAR, 
+                                        DOG, 
+                                        DRAGON, 
+                                        HAT,
+                                        PRETZEL,
+                                        SHIP, 
+                                        SOCCER, 
+                                        SURFER, 
+                                        THIMBLE};
+
+vector<string> Player::_AvailableNames = {"Barrow", 
+                                          "Baseball",
+                                          "Car", 
+                                          "Dog", 
+                                          "Dragon", 
+                                          "Hat",
+                                          "Pretzel",
+                                          "Ship", 
+                                          "Soccer", 
+                                          "Surfer", 
+                                          "Thimble"};
+
 /**
  * Default constructor
  */
@@ -13,22 +37,21 @@ Player::Player(const string name)
     string answer;
     TYPES type;
 
-    //sets player's piece
-    cout << "Barrow     = 1" << endl;
-    cout << "Baseball   = 2" << endl;
-    cout << "Car        = 3" << endl;
-    cout << "Dog        = 4" << endl;
-    cout << "Dragon     = 5" << endl;
-    cout << "Hat        = 6" << endl;
-    cout << "Pretzel    = 7" << endl;
-    cout << "Ship       = 8" << endl;
-    cout << "Soccer     = 9" << endl;
-    cout << "Surfer     = 10" << endl;
-    cout << "Thimble    = 11" << endl;
-    cout << "Which piece do you want to play ? ";
-    getline(cin, answer);
+    cout << "Which piece do you want to play ? " << endl;
 
-    switch (atoi(answer.c_str()))
+    //checks for available pieces
+    do
+    {
+        for (size_t i = 0; i < _AvailablePieces.size(); i++)
+        {
+            cout << _AvailableNames[i] << " = " << _AvailablePieces[i] << endl;
+        }
+        cout << "Number = ";
+        getline(cin, answer);
+    } while(find(_AvailablePieces.begin(), _AvailablePieces.end(), stoi(answer)) == _AvailablePieces.end());
+
+    //sets player's piece
+    switch (stoi(answer))
     {
         case 1:
             type = BARROW;
@@ -75,6 +98,10 @@ Player::Player(const string name)
             break;
     }
     _Piece = new Piece(type);
+
+    //clears vectors
+    _AvailableNames.erase(_AvailableNames.begin() + stoi(answer));
+    _AvailablePieces.erase(_AvailablePieces.begin() + stoi(answer));
 }
 
 Player::Player(const string name, const TYPES piece)
