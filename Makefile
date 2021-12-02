@@ -6,7 +6,7 @@ CXFLAGS  = -std=c++14 -Wall
 EXT		 = cpp
 LIBS	 = -lsfml-graphics -lsfml-system -lsfml-window -lm
 DIR_OBJS = ./bin
-EXEC	 = main
+EXEC	 = $(DIR_OBJS)/monopoly
 
 #-----------------------------------------#
 #				FILES    		
@@ -22,11 +22,9 @@ OBJS = $(addsuffix .o, $(addprefix $(DIR_OBJS)/, $(basename $(notdir $(SRC)))))
 #-----------------------------------------#
 #	       	COMPILING RULES	      
 #-----------------------------------------#
-all: $(EXEC)
+all: build $(OBJS) 
+	$(CX) $(CXFLAGS) $(OBJS) -o $(EXEC) $(LIBS)
 	@echo Project compiled !
-
-$(EXEC): directory $(OBJS) 
-	$(CX) $(CXFLAGS) $(OBJS) -o $(DIR_OBJS)/$(EXEC) $(LIBS)
 
 # Builds .o's from .cpp's using automatic variables 
 #	$<: the name of the prerequisite of the rule -> .cpp file 
@@ -34,9 +32,11 @@ $(EXEC): directory $(OBJS)
 $(DIR_OBJS)/%.o : ./src/%.$(EXT)
 	$(CX) $(CXFLAGS) -c $< -o $@
 
-directory:
-	mkdir -p $(DIR_OBJS)/
+.PHONY: build # To avoid errors when building 
+build:
+	mkdir -p $(DIR_OBJS)
 
+.PHONY: clean # To avoid errors when cleaning
 clean:
 	rm -rf $(DIR_OBJS)
 	@echo Files deleted, project clean.
