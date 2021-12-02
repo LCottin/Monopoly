@@ -1,15 +1,15 @@
 #include "Bank.hpp"
 
 /**
- * Default constructor
+ * @brief Constructs a new Bank object
  */
 Bank::Bank()
 {
-    _Amount = 100000;
+    _Amount = 20000;
 }
 
 /**
- * Tells how much left in the bank
+ * @brief Tells how much left in the bank
  * @returns Amount of money in the bank
  */
 int Bank::getAmout() const
@@ -18,7 +18,7 @@ int Bank::getAmout() const
 }
 
 /**
- * Takes money from the bank
+ * @brief Takes money from the bank
  * @param amout Money to take
  * @returns true if the bank is empty, else false
  */
@@ -34,7 +34,7 @@ bool Bank::output(const int amout)
 }
 
 /**
- * Gives money to the bank
+ * @brief Gives money to the bank
  * @param amout Money to give
  */
 void Bank::input(const int amout)
