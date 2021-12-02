@@ -1,8 +1,7 @@
 #include "House.hpp"
 
 /**
- * @brief Construct a new House:: House object  
- * 
+ * @brief Construct a new House object  
  * @param place Place of the house
  * @param name Name of the house
  * @param price Price of the house

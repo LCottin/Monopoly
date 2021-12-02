@@ -1,6 +1,6 @@
-/********************
- *       HOUSE      *
- ********************/
+/*************************
+ *       HOUSE CLASS     *
+ *************************/
 
 #ifndef __HOUSE__
 #define __HOUSE__
@@ -14,6 +14,7 @@
 
 using namespace std;
 
+class Player; // Forward declaration of Player class to avoid circular dependency
 class House
 {
     private:
