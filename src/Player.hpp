@@ -7,25 +7,25 @@
 
 #include <string>
 #include <iostream>
-#include <algorithm>
 #include "Piece.hpp"
-#include "PLACES.hpp"
 #include "Bank.hpp"
 #include "Dice.hpp"
+#include "House.hpp"
 
 using namespace std;
-using namespace sf;
 
+class House; // Forward declaration of House class to avoid circular dependency
 class Player
 {
     private:
-        string      _Pseudo;
-        Piece*      _Piece;
-        int         _Money;
-        bool        _Alive;
-        bool        _InJail;
-        int         _Position;
-        int         _Rolls[2];
+        string          _Pseudo;
+        Piece*          _Piece;
+        int             _Money;
+        bool            _Alive;
+        bool            _InJail;
+        int             _Position;
+        int             _Rolls[2];
+        vector<House*>  _Properties;
 
         static vector<int>      _AvailablePieces;
         static vector<string>   _AvailableNames;
@@ -43,6 +43,7 @@ class Player
         int*    rollDices(Dice* d1, Dice* d2);
         bool    move();
         void    move(const int pos);
+        bool    buy(House* house);
     
         ~Player();
 };
