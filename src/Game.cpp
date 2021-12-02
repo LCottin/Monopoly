@@ -81,7 +81,7 @@ Game::Game()
 }
 
 /**
- * Tells how many players will plays the game
+ * @brief Tells how many players will plays the game
  */
 void Game::getNbPlayers()
 {    
@@ -90,7 +90,9 @@ void Game::getNbPlayers()
     {
         cout << "Enter a number between 2 and 4 included. " << endl;
         cout << "Number = ";
-        cin >> _NbPlayers;
+        string answer;
+        getline(cin, answer);
+        _NbPlayers = stoi(answer);
     } while (_NbPlayers < 2 || _NbPlayers > 4);
     
     //creates all players
@@ -111,7 +113,7 @@ void Game::getNbPlayers()
 }
 
 /**
- * Main function, plays the game
+ * @brief Main function, plays the game
  */
 bool Game::playGame()
 {
@@ -159,9 +161,40 @@ bool Game::playGame()
         /* -------------------------------------- */
         _Board->drawPieces(_Window, _Players);
 
+        //TODO: step 5 player chooses to buy or not
         return true;
     }
     return true;
+}
+
+/**
+ * @brief Gets the house
+ * @param place Place of the house
+ * @returns The house
+ */
+House* Game::getHouse(PLACES place)
+{
+    for (size_t i = 0; i < _Houses.size(); i++)
+    {
+        if (_Houses[i]->getPlace() == place)
+            return _Houses[i];
+    }
+    return nullptr;
+}
+
+/**
+ * @brief Gets the house
+ * @param name Name of the house
+ * @returns The house
+ */
+House* Game::getHouse(string name)
+{
+    for (size_t i = 0; i < _Houses.size(); i++)
+    {
+        if (_Houses[i]->getName() == name)
+            return _Houses[i];
+    }
+    return nullptr;
 }
 
 /**

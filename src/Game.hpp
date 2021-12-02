@@ -6,7 +6,7 @@
 #define __GAME__
 
 #include "Board.hpp"
-#include "House.hpp"
+#include "Player.hpp"
 
 using namespace std;
 
@@ -30,6 +30,8 @@ class Game
     public:
         Game();
         void getNbPlayers();
+        House* getHouse(string name);
+        House* getHouse(PLACES place);
         bool playGame();
         ~Game();
 };
