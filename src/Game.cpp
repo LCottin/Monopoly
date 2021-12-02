@@ -1,7 +1,7 @@
 #include "Game.hpp"
 
 /**
- * Default constructor
+ * @brief Construct a new Game object
  */
 Game::Game()
 {
@@ -17,6 +17,67 @@ Game::Game()
     _Bank           = new Bank();
     _Chances        = new Chances();
     _Communities    = new Communities();
+
+    // Initialize the houses
+    House* h = new House(MEDITERRANEAN_AVENUE, "Mediterranean Avenue", 60);
+    _Houses.push_back(h);
+    House* h2 = new House(BALTIC_AVENUE, "Baltic Avenue", 60);
+    _Houses.push_back(h2);
+    House* h3 = new House(READING_RAILROAD, "Reading Railroad", 200);
+    _Houses.push_back(h3);
+    House* h4 = new House(ORIENTAL_AVENUE, "Oriental Avenue", 100);
+    _Houses.push_back(h4);
+    House* h5 = new House(VERMONT_AVENUE, "Vermont Avenue", 100);
+    _Houses.push_back(h5);
+    House* h6 = new House(CONNECTICUT_AVENUE, "Connecticut Avenue", 120);
+    _Houses.push_back(h6);
+
+    House* h7 = new House(ST_CHARLES_PLACE, "St. Charles Place", 140);
+    _Houses.push_back(h7);
+    House* h8 = new House(ELECTRIC_COMPANY, "Electric Company", 150);
+    _Houses.push_back(h8);
+    House* h9 = new House(STATES_AVENUE, "States Avenue", 140);
+    _Houses.push_back(h9);
+    House* h10 = new House(VIRGINIA_AVENUE, "Virginia Avenue", 160);
+    _Houses.push_back(h10);
+    House* h11 = new House(PENNSYLVANIA_RAILROAD, "Pennsylvania Railroad", 200);
+    _Houses.push_back(h11);
+    House* h12 = new House(ST_JAMES_PLACE, "St. James Place", 180);
+    _Houses.push_back(h12);
+    House* h13 = new House(TENNESSEE_AVENUE, "Tennessee Avenue", 180);
+    _Houses.push_back(h13);
+    House* h14 = new House(NEW_YORK_AVENUE, "New York Avenue", 200);
+    _Houses.push_back(h14);
+
+    House* h15 = new House(KENTUCKY_AVENUE, "Kentucky Avenue", 220);
+    _Houses.push_back(h15);
+    House* h16 = new House(INDIANA_AVENUE, "Indiana Avenue", 220);
+    _Houses.push_back(h16);
+    House* h17 = new House(ILLINOIS_AVENUE, "Illinois Avenue", 240);
+    _Houses.push_back(h17);
+    House* h18 = new House(B_AND_O_RAILROAD, "B. & O. Railroad", 200);
+    _Houses.push_back(h18);
+    House* h19 = new House(ATLANTIC_AVENUE, "Atlantic Avenue", 260);
+    _Houses.push_back(h19);
+    House* h20 = new House(VENTNOR_AVENUE, "Ventnor Avenue", 260);
+    _Houses.push_back(h20);
+    House* h21 = new House(WATER_WORKS, "Water Works", 150);
+    _Houses.push_back(h21);
+    House* h22 = new House(MARVIN_GARDENS, "Marvin Gardens", 280);
+    _Houses.push_back(h22);
+
+    House* h23 = new House(PACIFIC_AVENUE, "Pacific Avenue", 300);
+    _Houses.push_back(h23);
+    House* h24 = new House(NORTH_CAROLINA_AVENUE, "North Carolina Avenue", 300);
+    _Houses.push_back(h24);
+    House* h25 = new House(PENNSYLVANIA_AVENUE, "Pennsylvania Avenue", 320);
+    _Houses.push_back(h25);
+    House* h26 = new House(SHORT_LINE_RAILROAD, "Short Line Railroad", 200);
+    _Houses.push_back(h26);
+    House* h27 = new House(PARK_PLACE, "Park Place", 350);
+    _Houses.push_back(h27);
+    House* h28 = new House(BOARDWALK, "Boardwalk", 400);
+    _Houses.push_back(h28);
 }
 
 /**
@@ -111,6 +172,10 @@ Game::~Game()
     for (size_t i = 0; i < _Players.size(); i++)
     {
         delete _Players[i];
+    }
+    for (size_t i = 0; i < _Houses.size(); i++)
+    {
+        delete _Houses[i];
     }
     delete _Dice1;
     delete _Dice2;
