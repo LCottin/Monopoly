@@ -139,6 +139,7 @@ bool Game::playGame()
         _Board->drawBoard(_Window);
         _Board->drawPieces(_Window, _Players);
 
+        //TODO: implements prison before next turn
         /* =========================== */
         /* STEP 1 : player rolls dices */
         /* =========================== */
@@ -164,14 +165,66 @@ bool Game::playGame()
         /* =========================================== */
         /* STEP 5 : player acts according to the place */
         /* =========================================== */
-        //TODO: implements prison and jail cases 
+
+        // Checks if the player should go to jail
+        if (_CurrentPlayer->getPosition() == GO_TO_JAIL)
+        {
+            _CurrentPlayer->setInJail(true);
+            _CurrentPlayer->move(JAIL);
+            _Board->drawPieces(_Window, _Players);
+            break;
+        }
+
+        // Checks if the player is on LUXURY_TAX
+        if (_CurrentPlayer->getPosition() == LUXURY_TAX)
+        {
+            if (!_CurrentPlayer->payBank(_Bank, 75))
+            {
+                cout << "You don't have enough money to pay the tax. You lose." << endl;
+                cout << "You are eliminated from the game." << endl;
+                    _Players.erase(_Players.begin() + _CurrentTurn);
+                    _NbPlayers--;
+
+                    if (_NbPlayers == 1)
+                    {
+                        cout << "The winner is " << _Players[0]->getName() << " !" << endl;
+                        return true;
+                    }
+            }
+            _Board->drawPieces(_Window, _Players);
+            break;
+        }
+
+        // Checks if the player is on INCOME_TAX
+        //TODO: implements income tax
+
+        // Checks if the player is paying a visit to the prison
+        if (_CurrentPlayer->getPosition() == JAIL)
+        {
+            cout << "You are visiting the prison." << endl;
+            break;
+        }
+
+        // Checks if the player is on FREE_PARKING
+        if (_CurrentPlayer->getPosition() == FREE_PARKING)
+        {
+            cout << "You are resting on free parking." << endl;
+            break;
+        }
+
+        // Checks if the player is on COMMUNITY_CHEST
+        //TODO: implements community chest
+
+        // Checks if the player is on CHANCE_CARD
+        //TODO: implements chance card
+
+
         House* currentHouse = getHouse((PLACES)_CurrentPlayer->getPosition());
 
         // makes sure the player is on a house
         if (currentHouse == nullptr)    
         {
-            //FIXME: INCOME TAX or LUXURY TAX or CARDS 
-            cout << "Couldn't find the house" << endl;
+            cout << "Couldn't find the house. End of game" << endl;
             return false;
         }
 
@@ -185,8 +238,8 @@ bool Game::playGame()
             getline(cin, answer);
             if (answer == "y" || answer == "Y")
             {
-                if (!_CurrentPlayer->buy(currentHouse));
-                    cout << "You don't have enough money dzion." << endl;
+                if (!_CurrentPlayer->buy(currentHouse))
+                    cout << "You can't buy this house." << endl;
             }
         }
 
@@ -210,9 +263,32 @@ bool Game::playGame()
             // if the player is not the owner, he has to pay rent
             else
             {
-                Player* owner = currentHouse->getOwner();
+                bool ok;
 
-                bool ok = _CurrentPlayer->payRent(owner, currentHouse->getRent());
+                // If the player is on WATER_WORKS or ELECTRIC_COMPANY
+                if (_CurrentPlayer->getPosition() == WATER_WORKS || _CurrentPlayer->getPosition() == ELECTRIC_COMPANY)
+                {
+                    Player* waterWorksOwner      = getHouse(WATER_WORKS)->getOwner();
+                    Player* electricCompanyOwner = getHouse(ELECTRIC_COMPANY)->getOwner();
+
+                    int amount = rolls[0] + rolls[1];
+                    if (waterWorksOwner == electricCompanyOwner)
+                        amount *= 10;
+                    else 
+                        amount *= 4;
+                    
+                    if (_CurrentPlayer->getPosition() == WATER_WORKS)
+                        ok = _CurrentPlayer->payRent(waterWorksOwner, amount);
+                    
+                    else 
+                        ok = _CurrentPlayer->payRent(electricCompanyOwner, amount);
+                }
+
+                // If the player is on a normal house
+                else
+                    ok = _CurrentPlayer->payRent(currentHouse->getOwner(), currentHouse->getRent());
+                
+                // Makes sure the player has enough money to pay the rent
                 if (!ok)
                 {
                     cout << "You don't have enough money to pay the rent." << endl;
