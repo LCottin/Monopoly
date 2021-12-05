@@ -33,12 +33,15 @@ class Player
     public:
         Player(const string name);
         Player(const string name, const TYPES type);
+
         string  getName() const;
         Piece*  getPiece() const;
         int     getMoney() const;
         int     getPosition() const;
         bool    getStatus() const;
         bool    isInJail() const;
+
+        void    setInJail(const bool inJail);
         void    go(Bank* bank);
         int*    rollDices(Dice* d1, Dice* d2);
         bool    move();
@@ -46,6 +49,7 @@ class Player
         bool    buy(House* house);
         bool    sell(House* house);
         void    addMoney(const int money);
+        bool    payBank(Bank* bank, const int money);
         bool    removeMoney(const int money);
         bool    payRent(Player* player, const int amount);
     

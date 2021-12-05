@@ -223,6 +223,27 @@ int* Player::rollDices(Dice* d1, Dice* d2)
 }
 
 /**
+ * @brief Sets the player's situation
+ * @param inJail True if the player is in jail, else false
+ */
+void Player::setInJail(const bool inJail)
+{
+    _InJail = inJail;
+}
+
+/**
+ * @brief The player pays the bank for the amount he has to pay
+ * @param bank Bank of the game
+ * @param amount Amount to pay
+ * @returns True if the player has enough money, else false
+ */
+bool Player::payBank(Bank* bank, const int amount)
+{
+    bank->input(amount);
+    return removeMoney(amount);
+}
+
+/**
  * @brief Buys a property
  * @param house House to buy
  * @returns true if the player can buy the property, else false
