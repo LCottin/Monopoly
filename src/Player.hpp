@@ -44,6 +44,10 @@ class Player
         bool    move();
         void    move(const int pos);
         bool    buy(House* house);
+        bool    sell(House* house);
+        void    addMoney(const int money);
+        bool    removeMoney(const int money);
+        bool    payRent(Player* player, const int amount);
     
         ~Player();
 };
