@@ -5,8 +5,9 @@
  */
 Cards::Cards() 
 {
-    _Cards = 16;
-    _Scale = Vector2f(0.45, 0.50);
+    _CardsInDeck  = 16;
+    _Number       = 0;
+    _Scale        = Vector2f(0.45, 0.50);
 
     _MainSprite.setScale(_Scale);
     _FocusSprite.setScale(_Scale);

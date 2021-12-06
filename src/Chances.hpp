@@ -12,6 +12,7 @@ class Chances : public Cards
     public:
         Chances();
         Sprite* drawCard();
+        bool execute(Bank* bank, Player* player, vector<Player*>& players);
         ~Chances();
 };
 
