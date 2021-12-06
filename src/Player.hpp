@@ -39,13 +39,14 @@ class Player
         int     getMoney() const;
         int     getPosition() const;
         bool    getStatus() const;
+        int     getPropertyCount() const;
         bool    isInJail() const;
 
         void    setInJail(const bool inJail);
         void    go(Bank* bank);
         int*    rollDices(Dice* d1, Dice* d2);
         bool    move();
-        void    move(const int pos);
+        bool    move(const int pos);
         bool    buy(House* house);
         bool    sell(House* house);
         void    addMoney(const int money);

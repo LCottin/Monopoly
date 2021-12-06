@@ -203,12 +203,31 @@ bool Player::move()
 }
 
 /**
+ * @brief Returns the number of houses the player owns
+ * @returns Number of houses
+ */
+int Player::getPropertyCount() const
+{
+    return (int)_Properties.size();
+}
+
+/**
  * @brief Moves the player on the board
  * @param pos New position on the board
+ * @returns true if the player comes across go, else false
  */
-void Player::move(const int pos)
+bool Player::move(const int pos)
 {
-    _Position = (pos < 40) ? pos : pos % 40;
+    int newPos = (pos < 40) ? pos : pos % 40;
+    
+    if (newPos < _Position)
+    {
+        _Position = newPos;
+        return true;
+    }
+
+    _Position = newPos;
+    return false;
 }
 
 /**
