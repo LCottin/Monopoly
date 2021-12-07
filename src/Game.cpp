@@ -143,6 +143,7 @@ bool Game::playGame()
         /* =========================== */
         /* STEP 1 : player rolls dices */
         /* =========================== */
+        //FIXME: implements three doubles in a row to go to prison 
         int* rolls = _CurrentPlayer->rollDices(_Dice1, _Dice2);
 
         /* ===================================== */
@@ -172,7 +173,7 @@ bool Game::playGame()
             _CurrentPlayer->setInJail(true);
             _CurrentPlayer->move(JAIL);
             _Board->drawPieces(_Window, _Players);
-            break;
+            continue;
         }
 
         // Checks if the player is on LUXURY_TAX
@@ -192,32 +193,88 @@ bool Game::playGame()
                     }
             }
             _Board->drawPieces(_Window, _Players);
-            break;
+            continue;
         }
 
         // Checks if the player is on INCOME_TAX
-        //TODO: implements income tax
+        if (_CurrentPlayer->getPosition() == INCOME_TAX)
+        {
+            cout << "You have to choose to pay 200 or 10% of your total worth." << endl;
+            cout << "1. Pay 200" << endl;
+            cout << "2. Pay 10% of your total worth" << endl;
+            cout << "Your choice : ";
+            bool ok = false;
+            int choice;
+            do
+            {   choice = -1;
+                string answer;
+                getline(cin, answer);
+                choice = stoi(answer);
+                if (choice == 1)
+                {
+                    ok = _CurrentPlayer->payBank(_Bank, 200);
+                }
+                else if (choice == 2)
+                {
+                    int assets = _CurrentPlayer->getAssets();
+                    cout << "Your total worth is " << assets << endl;
+                    cout << "You have to pay " << assets * 0.1 << endl;
+                    ok = _CurrentPlayer->payBank(_Bank, assets * 0.1);
+                }
+            } while (choice != 1 && choice != 2);
+            
+            //if the players couldn't pay the tax, he is eliminated from the game
+            if (ok == false)
+            {
+                cout << "You don't have enough money to pay the tax. You lose." << endl;
+                cout << "You are eliminated from the game." << endl;
+                _Players.erase(_Players.begin() + _CurrentTurn);
+                _NbPlayers--;
+
+                if (_NbPlayers == 1)
+                {
+                    cout << "The winner is " << _Players[0]->getName() << " !" << endl;
+                    return true;
+                }
+            }
+
+            _Board->drawPieces(_Window, _Players);
+            continue;
+        }
 
         // Checks if the player is paying a visit to the prison
         if (_CurrentPlayer->getPosition() == JAIL)
         {
             cout << "You are visiting the prison." << endl;
-            break;
+            continue;
         }
 
         // Checks if the player is on FREE_PARKING
         if (_CurrentPlayer->getPosition() == FREE_PARKING)
         {
             cout << "You are resting on free parking." << endl;
-            break;
+            continue;
         }
 
         // Checks if the player is on COMMUNITY_CHEST
-        //TODO: implements community chest
+        if (_CurrentPlayer->getPosition() == COMMUNITY_CHEST_1 || _CurrentPlayer->getPosition() == COMMUNITY_CHEST_2 || _CurrentPlayer->getPosition() == COMMUNITY_CHEST_3)
+        {
+            _Board->drawCard(_Window, _Communities->drawCard(), false);
+            _Communities->execute(_Bank, _CurrentPlayer, _Players);
+            sleep(milliseconds(3000));
+            _Board->drawPieces(_Window, _Players);
+            continue;
+        }
 
         // Checks if the player is on CHANCE_CARD
-        //TODO: implements chance card
-
+        if (_CurrentPlayer->getPosition() == CHANCE_1 || _CurrentPlayer->getPosition() == CHANCE_2 || _CurrentPlayer->getPosition() == CHANCE_3)
+        {
+            _Board->drawCard(_Window, _Chances->drawCard(), false);
+            _Chances->execute(_Bank, _CurrentPlayer, _Players);
+            sleep(milliseconds(3000));
+            _Board->drawPieces(_Window, _Players);
+            continue;
+        }
 
         House* currentHouse = getHouse((PLACES)_CurrentPlayer->getPosition());
 
@@ -304,7 +361,8 @@ bool Game::playGame()
                 }
             }
         }
-        return true;
+        //uncomments to run one turn 
+        //return true;
     }
     return true;
 }
