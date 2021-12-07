@@ -11,6 +11,8 @@ Cards::Cards()
 
     _MainSprite.setScale(_Scale);
     _FocusSprite.setScale(_Scale);
+
+    _OtherSprite.setPosition(Vector2f(150, 200));
 }
 
 /**
