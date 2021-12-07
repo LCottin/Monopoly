@@ -25,10 +25,13 @@ class Player
         bool            _InJail;
         int             _Position;
         int             _Rolls[2];
+        int             _Assets;
         vector<House*>  _Properties;
 
         static vector<int>      _AvailablePieces;
         static vector<string>   _AvailableNames;
+
+        void updateAssets();
 
     public:
         Player(const string name);
@@ -40,6 +43,7 @@ class Player
         int     getPosition() const;
         bool    getStatus() const;
         int     getPropertyCount() const;
+        int     getAssets() const;
         bool    isInJail() const;
 
         void    setInJail(const bool inJail);
