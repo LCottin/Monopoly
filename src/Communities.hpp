@@ -12,6 +12,7 @@ class Communities : public Cards
     public:
         Communities();
         Sprite* drawCard();
+        bool execute(Bank* bank, Player* player, vector<Player*>& players);
         ~Communities();
 };
 

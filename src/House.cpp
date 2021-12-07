@@ -5,12 +5,14 @@
  * @param place Place of the house
  * @param name Name of the house
  * @param price Price of the house
+ * @param rent Rent of the house
  */
-House::House(PLACES place, string name, int price)
+House::House(PLACES place, string name, int price, int rent)
 {
     _Place  = place;
     _Name   = name;
     _Price  = price;
+    _Rent   = rent;
     _IsSold = false;
     _Owner  = nullptr;
 }
@@ -22,6 +24,15 @@ House::House(PLACES place, string name, int price)
 int House::getPrice() const
 {
     return _Price;
+}
+
+/**
+ * @brief Returns the rent of the house
+ * @returns The rent of the house
+ */
+int House::getRent() const
+{
+    return _Rent;
 }
 
 /**

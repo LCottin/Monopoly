@@ -12,6 +12,7 @@
 
 #include "SFML/Graphics.hpp"
 #include "SFML/Window.hpp"
+#include "Player.hpp"
 
 using namespace std;
 using namespace sf;
@@ -20,7 +21,8 @@ class Cards
 {
     protected:
         //number of cards available
-        int _Cards;
+        int         _CardsInDeck;
+        int         _Number;
         vector<int> _Numbers;
         
         //template cards
@@ -39,6 +41,7 @@ class Cards
         Sprite* getMainSprite();
         Sprite* getFocusSprite();
         virtual Sprite* drawCard() = 0;
+        virtual bool execute(Bank* bank, Player* player, vector<Player*>& players) = 0;
         virtual ~Cards();
 };
 

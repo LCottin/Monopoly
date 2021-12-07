@@ -21,15 +21,17 @@ class House
         PLACES  _Place;
         string  _Name;
         int     _Price;
+        int     _Rent;
         bool    _IsSold;
         Player* _Owner;
 
     public:
-        House(PLACES place, string name, int price);
+        House(PLACES place, string name, int price, int rent);
         int     getPrice() const;
         PLACES  getPlace() const;
         string  getName() const;
         Player* getOwner();
+        int     getRent() const;
         bool    IsSold() const;
 
         void    setOwner(Player* player);

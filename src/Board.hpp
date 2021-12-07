@@ -27,9 +27,10 @@ class Board
         Board();
         Sprite* getSprite();
         Sprite* getOtherSprite();
-        void    drawBoard(RenderWindow& window, bool clear = true, bool display = true);
+        void    drawBoard(RenderWindow& window, const bool clear = true, const bool display = true);
         void    drawPieces(RenderWindow& window, vector<Player*> players);
         void    drawRolls(RenderWindow& window, const int* rolls);
+        void    drawCard(RenderWindow& window, const Sprite* card, const bool clear = true, const bool display = true);
         ~Board();
 };
 
