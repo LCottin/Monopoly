@@ -262,7 +262,7 @@ void Board::movePiece(RenderWindow& window, Player* player)
  * Draws the board and the cards on it
  * @param window Window to draw on
  */
-void Board::drawBoard(RenderWindow& window, bool clear, bool display)
+void Board::drawBoard(RenderWindow& window, const bool clear, const bool display)
 {
     Chances ch;
     Communities com;
@@ -272,6 +272,20 @@ void Board::drawBoard(RenderWindow& window, bool clear, bool display)
     window.draw(_Sprite);
     window.draw(*ch.getMainSprite());
     window.draw(*com.getMainSprite());
+    if (display)
+        window.display();
+}
+
+/**
+ * Draws the board and the cards on it
+ * @param window Window to draw on
+ * @param sprite Sprite to draw
+ */
+void Board::drawCard(RenderWindow& window, const Sprite* sprite, const bool clear, const bool display)
+{
+    if (clear)
+        window.clear();
+    window.draw(*sprite);
     if (display)
         window.display();
 }
