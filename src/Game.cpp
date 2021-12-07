@@ -131,6 +131,7 @@ bool Game::playGame()
             if (event.type == Event::Closed)
             {
                 _Window.close();
+                return false;
             }
         } 
 
@@ -212,6 +213,7 @@ bool Game::playGame()
                 choice = stoi(answer);
                 if (choice == 1)
                 {
+                    cout << "You pay 200." << endl;
                     ok = _CurrentPlayer->payBank(_Bank, 200);
                 }
                 else if (choice == 2)
