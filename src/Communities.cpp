@@ -63,6 +63,7 @@ bool Communities::execute(Bank* bank, Player* player, vector<Player*>& players)
             //Goes to go and collects 200
             player->move(GO);
             player->go(bank);
+            cout << "You have collected 200 from the bank" << endl;
             return true;
         }
 
@@ -71,13 +72,19 @@ bool Communities::execute(Bank* bank, Player* player, vector<Player*>& players)
             // Bank error in your favor. Collects 200
             bank->output(200);
             player->addMoney(200);
+            cout << "You have collected 200 from the bank" << endl;
             return true;
         }
         
         case 3:
         {
             // Doctor's fees. Payes 50
-            return player->payBank(bank, 50);
+            bool ok = player->payBank(bank, 50);
+            if (ok)
+                cout << "You have paid 50 to the bank" << endl;
+            else
+                cout << "You don't have enough money -> ERROR" << endl;
+            return ok;
         }
 
         case 4:
@@ -85,6 +92,7 @@ bool Communities::execute(Bank* bank, Player* player, vector<Player*>& players)
             // Gets 50 from sale of stock you own.
             bank->output(50);
             player->addMoney(50);
+            cout << "You have collected 50 from the bank" << endl;
             return true;
         }
 
@@ -99,6 +107,7 @@ bool Communities::execute(Bank* bank, Player* player, vector<Player*>& players)
         {
             // Goes directly to jail. Do not pass go. Do not collect 200
             player->move(JAIL);
+            cout << "You have been sent to jail" << endl;
             return true;
         }
 
@@ -114,6 +123,10 @@ bool Communities::execute(Bank* bank, Player* player, vector<Player*>& players)
                     player->addMoney(50);
                 }
             }
+            if (ok)
+                cout << "You have collected 50 from every player" << endl;
+            else
+                cout << "You have not collected 50 from every player -> ERROR" << endl;
             return ok;
         }
 
@@ -121,6 +134,7 @@ bool Communities::execute(Bank* bank, Player* player, vector<Player*>& players)
         {
             // Holiday fund matures. Collects 100
             player->addMoney(100);
+            cout << "You have collected 100 from the bank" << endl;
             return true;
         }
         
@@ -129,6 +143,7 @@ bool Communities::execute(Bank* bank, Player* player, vector<Player*>& players)
             // It's your birthday. Collect 20
             bank->output(20);
             player->addMoney(20);
+            cout << "You have collected 20 from the bank" << endl;
             return true;
         }
 
@@ -137,19 +152,30 @@ bool Communities::execute(Bank* bank, Player* player, vector<Player*>& players)
             // Life insurance matures. Collect 100
             bank->output(100);
             player->addMoney(100);
+            cout << "You have collected 100 from the bank" << endl;
             return true;
         }
         
         case 11:
         {
             // Payes hospital fees of $100
-            return player->payBank(bank, 100);
+            bool ok = player->payBank(bank, 100);
+            if (ok)
+                cout << "You have paid 100 to the bank" << endl;
+            else
+                cout << "You don't have enough money -> ERROR" << endl;
+            return ok;
         }
 
         case 12:
         {
             // Payes school fees of $100
-            return player->payBank(bank, 100);
+            bool ok = player->payBank(bank, 100);
+            if (ok)
+                cout << "You have paid 100 to the bank" << endl;
+            else
+                cout << "You don't have enough money -> ERROR" << endl;
+            return ok;
         }
 
         case 13:
@@ -157,6 +183,7 @@ bool Communities::execute(Bank* bank, Player* player, vector<Player*>& players)
             // Receives $25 consultancy fee
             bank->output(25);
             player->addMoney(25);
+            cout << "You have collected 25 from the bank" << endl;
             return true;
         }
 
@@ -165,7 +192,12 @@ bool Communities::execute(Bank* bank, Player* player, vector<Player*>& players)
             //TODO: implements hotels
             // Makes general repairs on all your property. For each house pay $40. For each hotel $100.
             int toPay = player->getPropertyCount() * 40;
-            return player->payBank(bank, toPay);
+            bool ok = player->payBank(bank, toPay);
+            if (ok)
+                cout << "You have paid " << to_string(toPay) << " to the bank" << endl;
+            else
+                cout << "You don't have enough money -> ERROR" << endl;
+            return ok;
         }
 
         case 15:
@@ -173,6 +205,7 @@ bool Communities::execute(Bank* bank, Player* player, vector<Player*>& players)
             // Won a second prize in a beauty contest. Collect 50
             bank->output(50);
             player->addMoney(50);
+            cout << "You have collected 50 from the bank" << endl;
             return true;
         }
         
@@ -181,6 +214,7 @@ bool Communities::execute(Bank* bank, Player* player, vector<Player*>& players)
             // You inherits $100
             bank->output(100);
             player->addMoney(100);
+            cout << "You have collected 100 from the bank" << endl;
             return true;
         }
 
