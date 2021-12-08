@@ -10,6 +10,7 @@ Game::Game()
 
     _NbPlayers      = -1;
     _CurrentTurn    = 0;
+    _TotalTurns     = 0;
 
     _Dice1          = new Dice();
     _Dice2          = new Dice();
@@ -121,6 +122,9 @@ bool Game::playGame()
 
     while (_Window.isOpen())
     {
+        _TotalTurns++;
+        if (_TotalTurns == 2) 
+            return true;
         _CurrentTurn    = (_CurrentTurn + 1) % _NbPlayers;
         _CurrentPlayer  = _Players[_CurrentTurn];
 

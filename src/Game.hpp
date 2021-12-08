@@ -26,6 +26,7 @@ class Game
 
         int             _NbPlayers;
         int             _CurrentTurn;
+        int             _TotalTurns;
 
     public:
         Game();
