@@ -5,7 +5,7 @@
  */
 Game::Game()
 {
-    _Window.create(VideoMode(800, 800), "Monopoly game !");
+    _Window.create(VideoMode(1000, 800), "Monopoly game !");
     _Window.setFramerateLimit(10);
 
     _NbPlayers      = -1;
@@ -120,11 +120,13 @@ bool Game::playGame()
 {
     getNbPlayers();
 
+    vector<Player*> playersCopy = _Players;
+
     while (_Window.isOpen())
     {
         _TotalTurns++;
         _CurrentTurn    = (_CurrentTurn + 1) % _NbPlayers;
-        _CurrentPlayer  = _Players[_CurrentTurn];
+        _CurrentPlayer  = playersCopy[_CurrentTurn];
 
         Event event;
 
@@ -137,11 +139,13 @@ bool Game::playGame()
             }
         } 
 
-        sleep(milliseconds(1000));
+        string message = "Turn : " + to_string(_TotalTurns);
 
         _Board->drawBoard(_Window);
-        _Board->drawPieces(_Window, _Players);
+        _Board->drawPieces(_Window, playersCopy);
+        _Board->drawText(_Window, message, Color::Blue, false);
 
+        sleep(milliseconds(1000));
         //TODO: implements prison before next turn
         /* =========================== */
         /* STEP 1 : player rolls dices */
@@ -164,7 +168,7 @@ bool Game::playGame()
         /* ====================================== */
         /* STEP 4 : updates position on the board */
         /* ====================================== */
-        _Board->drawPieces(_Window, _Players);
+        _Board->drawPieces(_Window, playersCopy);
 
         /* =========================================== */
         /* STEP 5 : player acts according to the place */
@@ -175,7 +179,7 @@ bool Game::playGame()
         {
             _CurrentPlayer->setInJail(true);
             _CurrentPlayer->move(JAIL);
-            _Board->drawPieces(_Window, _Players);
+            _Board->drawPieces(_Window, playersCopy);
             continue;
         }
 
@@ -186,16 +190,16 @@ bool Game::playGame()
             {
                 cout << "You don't have enough money to pay the tax. You lose." << endl;
                 cout << "You are eliminated from the game." << endl;
-                    _Players.erase(_Players.begin() + _CurrentTurn);
+                    playersCopy.erase(playersCopy.begin() + _CurrentTurn);
                     _NbPlayers--;
 
                     if (_NbPlayers == 1)
                     {
-                        cout << "The winner is " << _Players[0]->getName() << " !" << endl;
+                        cout << "The winner is " << playersCopy[0]->getName() << " !" << endl;
                         return true;
                     }
             }
-            _Board->drawPieces(_Window, _Players);
+            _Board->drawPieces(_Window, playersCopy);
             continue;
         }
 
@@ -218,8 +222,8 @@ bool Game::playGame()
             {
                 int assets = _CurrentPlayer->getAssets();
                 cout << "Your total worth is " << assets << endl;
-                cout << "You have to pay " << assets * 0.1 << endl;
-                ok = _CurrentPlayer->payBank(_Bank, assets * 0.1);
+                cout << "You have to pay " << assets / 10 << endl;
+                ok = _CurrentPlayer->payBank(_Bank, assets / 10);
             }
         
             //if the players couldn't pay the tax, he is eliminated from the game
@@ -227,17 +231,17 @@ bool Game::playGame()
             {
                 cout << "You don't have enough money to pay the tax. You lose." << endl;
                 cout << "You are eliminated from the game." << endl;
-                _Players.erase(_Players.begin() + _CurrentTurn);
+                playersCopy.erase(playersCopy.begin() + _CurrentTurn);
                 _NbPlayers--;
 
                 if (_NbPlayers == 1)
                 {
-                    cout << "The winner is " << _Players[0]->getName() << " !" << endl;
+                    cout << "The winner is " << playersCopy[0]->getName() << " !" << endl;
                     return true;
                 }
             }
 
-            _Board->drawPieces(_Window, _Players);
+            _Board->drawPieces(_Window, playersCopy);
             continue;
         }
 
@@ -259,9 +263,9 @@ bool Game::playGame()
         if (_CurrentPlayer->getPosition() == COMMUNITY_CHEST_1 || _CurrentPlayer->getPosition() == COMMUNITY_CHEST_2 || _CurrentPlayer->getPosition() == COMMUNITY_CHEST_3)
         {
             _Board->drawCard(_Window, _Communities->drawCard(), false);
-            _Communities->execute(_Bank, _CurrentPlayer, _Players);
+            _Communities->execute(_Bank, _CurrentPlayer, playersCopy);
             sleep(milliseconds(3000));
-            _Board->drawPieces(_Window, _Players);
+            _Board->drawPieces(_Window, playersCopy);
             continue;
         }
 
@@ -269,9 +273,9 @@ bool Game::playGame()
         if (_CurrentPlayer->getPosition() == CHANCE_1 || _CurrentPlayer->getPosition() == CHANCE_2 || _CurrentPlayer->getPosition() == CHANCE_3)
         {
             _Board->drawCard(_Window, _Chances->drawCard(), false);
-            _Chances->execute(_Bank, _CurrentPlayer, _Players);
+            _Chances->execute(_Bank, _CurrentPlayer, playersCopy);
             sleep(milliseconds(3000));
-            _Board->drawPieces(_Window, _Players);
+            _Board->drawPieces(_Window, playersCopy);
             continue;
         }
 
@@ -356,19 +360,17 @@ bool Game::playGame()
                 {
                     cout << "You don't have enough money to pay the rent." << endl;
                     cout << "You are eliminated from the game." << endl;
-                    _Players.erase(_Players.begin() + _CurrentTurn);
+                    playersCopy.erase(playersCopy.begin() + _CurrentTurn);
                     _NbPlayers--;
 
                     if (_NbPlayers == 1)
                     {
-                        cout << "The winner is " << _Players[0]->getName() << " !" << endl;
+                        cout << "The winner is " << playersCopy[0]->getName() << " !" << endl;
                         return true;
                     }
                 }
             }
         }
-        //uncomments to run one turn 
-        return true;
     }
     return true;
 }
