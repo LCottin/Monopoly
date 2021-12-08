@@ -267,13 +267,25 @@ void Board::drawBoard(RenderWindow& window, const bool clear, const bool display
     Chances ch;
     Communities com;
 
+    Font font;
+    font.loadFromFile("Raleway-Regular.ttf");
+    Text yes("YES (1)", font, 40);
+    Text no("NO (2)", font, 40);
+    yes.setFillColor(Color::Black);
+    no.setFillColor(Color::Black);
+    yes.setPosition(150, 630);
+    no.setPosition(300, 630);
+
     if (clear)
         window.clear();
     window.draw(_Sprite);
     window.draw(*ch.getMainSprite());
     window.draw(*com.getMainSprite());
+    window.draw(yes);
+    window.draw(no);
     if (display)
         window.display();
+    sleep(milliseconds(2000));
 }
 
 /**
