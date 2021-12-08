@@ -10,6 +10,12 @@ Board::Board()
 
     _Sprite.setTexture(_Texture);
     _FocusSprite.setTexture(_FocusTexture);
+
+    _YesBoxPos = Vector2f(148, 628);
+    _NoBoxPos = Vector2f(298, 628);
+
+    _YesBoxSize = Vector2f(130, 50);
+    _NoBoxSize = Vector2f(120, 50);
 }
 
 /**
@@ -269,12 +275,30 @@ void Board::drawBoard(RenderWindow& window, const bool clear, const bool display
 
     Font font;
     font.loadFromFile("Raleway-Regular.ttf");
+    
+    //Yes text
     Text yes("YES (1)", font, 40);
-    Text no("NO (2)", font, 40);
     yes.setFillColor(Color::Black);
-    no.setFillColor(Color::Black);
     yes.setPosition(150, 630);
+
+    //No text
+    Text no("NO (2)", font, 40);
+    no.setFillColor(Color::Black);
     no.setPosition(300, 630);
+
+    //Yes box
+    RectangleShape rect1(_YesBoxSize);
+    rect1.setFillColor(Color::Transparent);
+    rect1.setOutlineColor(Color::Black);
+    rect1.setOutlineThickness(5);
+    rect1.setPosition(_YesBoxPos);
+
+    //No box
+    RectangleShape rect2(_NoBoxSize);
+    rect2.setFillColor(Color::Transparent);
+    rect2.setOutlineColor(Color::Black);
+    rect2.setOutlineThickness(5);
+    rect2.setPosition(_NoBoxPos);
 
     if (clear)
         window.clear();
@@ -283,9 +307,46 @@ void Board::drawBoard(RenderWindow& window, const bool clear, const bool display
     window.draw(*com.getMainSprite());
     window.draw(yes);
     window.draw(no);
+    window.draw(rect1);
+    window.draw(rect2);
     if (display)
         window.display();
     sleep(milliseconds(2000));
+}
+
+/**
+ * @brief Indicates which box the player clicked on
+ * @param window Window to draw on
+ * @returns The box the player clicked on
+ */
+BOXES Board::boxClicked(RenderWindow& window)
+{
+    Event event;
+    while(true)
+    {
+        while (window.pollEvent(event))
+        {
+            if (event.type == Event::Closed)
+            {
+                window.close();
+                return EXIT;
+            }
+            if (event.type == Event::MouseButtonPressed)
+            {
+                if (event.mouseButton.button == Mouse::Left)
+                {
+                    //Returns the box the player clicked on
+                    Vector2i mousPos = Mouse::getPosition(window);
+                    if (mousPos.x >= _YesBoxPos.x && mousPos.x <= _YesBoxPos.x + _YesBoxSize.x &&
+                        mousPos.y >= _YesBoxPos.y && mousPos.y <= _YesBoxPos.y + _YesBoxSize.y)
+                        return YES;
+                    else if (mousPos.x >= _NoBoxPos.x && mousPos.x <= _NoBoxPos.x + _NoBoxSize.x &&
+                            mousPos.y >= _NoBoxPos.y && mousPos.y <= _NoBoxPos.y + _NoBoxSize.y)
+                        return NO;
+                }
+            }
+        }
+    }
 }
 
 /**

@@ -13,6 +13,7 @@
 #include "Player.hpp"
 #include "Communities.hpp"
 #include "Chances.hpp"
+#include "BOXES.hpp"
 
 using namespace std;
 
@@ -22,6 +23,9 @@ class Board
         Texture     _Texture, _FocusTexture;
         Sprite      _Sprite, _FocusSprite;
         void        movePiece(RenderWindow& window, Player* player);
+
+        Vector2f    _YesBoxPos, _NoBoxPos;
+        Vector2f    _YesBoxSize, _NoBoxSize;
         
     public:
         Board();
@@ -31,6 +35,7 @@ class Board
         void    drawPieces(RenderWindow& window, vector<Player*> players);
         void    drawRolls(RenderWindow& window, const int* rolls);
         void    drawCard(RenderWindow& window, const Sprite* card, const bool clear = true, const bool display = true);
+        BOXES   boxClicked(RenderWindow& window);
         ~Board();
 };
 
