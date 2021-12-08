@@ -123,8 +123,6 @@ bool Game::playGame()
     while (_Window.isOpen())
     {
         _TotalTurns++;
-        if (_TotalTurns == 2) 
-            return true;
         _CurrentTurn    = (_CurrentTurn + 1) % _NbPlayers;
         _CurrentPlayer  = _Players[_CurrentTurn];
 
@@ -209,26 +207,21 @@ bool Game::playGame()
             cout << "2. Pay 10% of your total worth" << endl;
             cout << "Your choice : ";
             bool ok = false;
-            int choice;
-            do
-            {   choice = -1;
-                string answer;
-                getline(cin, answer);
-                choice = stoi(answer);
-                if (choice == 1)
-                {
-                    cout << "You pay 200." << endl;
-                    ok = _CurrentPlayer->payBank(_Bank, 200);
-                }
-                else if (choice == 2)
-                {
-                    int assets = _CurrentPlayer->getAssets();
-                    cout << "Your total worth is " << assets << endl;
-                    cout << "You have to pay " << assets * 0.1 << endl;
-                    ok = _CurrentPlayer->payBank(_Bank, assets * 0.1);
-                }
-            } while (choice != 1 && choice != 2);
-            
+
+            BOXES box = _Board->boxClicked(_Window);
+            if (box == YES)
+            {
+                cout << "You pay 200." << endl;
+                ok = _CurrentPlayer->payBank(_Bank, 200);
+            }
+            else if (box == NO)
+            {
+                int assets = _CurrentPlayer->getAssets();
+                cout << "Your total worth is " << assets << endl;
+                cout << "You have to pay " << assets * 0.1 << endl;
+                ok = _CurrentPlayer->payBank(_Bank, assets * 0.1);
+            }
+        
             //if the players couldn't pay the tax, he is eliminated from the game
             if (ok == false)
             {
@@ -296,13 +289,16 @@ bool Game::playGame()
         {
             cout << "No owner." << endl;
             cout << "You currently have " << _CurrentPlayer->getMoney() << " dollars." << endl;
-            cout << "Do you want to buy this house ? (y/n)" << endl;
-            string answer;
-            getline(cin, answer);
-            if (answer == "y" || answer == "Y")
+            cout << "Do you want to buy this house ? Click on the box." << endl;
+            BOXES box = _Board->boxClicked(_Window);
+            if (box == YES)
             {
                 if (!_CurrentPlayer->buy(currentHouse))
                     cout << "You can't buy this house." << endl;
+            }
+            else if (box == NO)
+            {
+                cout << "You don't buy this house." << endl;
             }
         }
 
@@ -314,12 +310,16 @@ bool Game::playGame()
             {
                 cout << "You are at home, you already own this house" << endl;
                 cout << "You currently have " << _CurrentPlayer->getMoney() << " dollars." << endl;
-                cout << "Do you want to sell this house ? (y/n)" << endl;
-                string answer;
-                getline(cin, answer);
-                if (answer == "y" || answer == "Y")
+                cout << "Do you want to sell this house ? Click on the box." << endl;
+                BOXES box = _Board->boxClicked(_Window);
+                if (box == YES)
                 {
-                    _CurrentPlayer->sell(currentHouse);
+                    if (!_CurrentPlayer->sell(currentHouse))
+                        cout << "You can't sell this house." << endl;
+                }
+                else if (box == NO)
+                {
+                    cout << "You don't sell this house." << endl;
                 }
             }
 
@@ -368,7 +368,7 @@ bool Game::playGame()
             }
         }
         //uncomments to run one turn 
-        //return true;
+        return true;
     }
     return true;
 }
