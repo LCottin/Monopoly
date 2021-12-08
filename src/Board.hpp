@@ -20,13 +20,20 @@ using namespace std;
 class Board
 {
     protected:
-        Texture     _Texture, _FocusTexture;
-        Sprite      _Sprite, _FocusSprite;
-        void        movePiece(RenderWindow& window, Player* player);
+        Texture         _Texture, _FocusTexture;
+        Sprite          _Sprite, _FocusSprite;
+        void            movePiece(RenderWindow& window, Player* player);
 
-        Vector2f    _YesBoxPos, _NoBoxPos;
-        Vector2f    _YesBoxSize, _NoBoxSize;
-        
+        Font            _Font;
+        Text            _YesText, _NoText;
+
+        RectangleShape  _YesBox, _NoBox;
+
+        Vector2f        _YesBoxPos, _NoBoxPos;
+        Vector2f        _YesBoxSize, _NoBoxSize;
+        Vector2f        _YesTextPos, _NoTextPos;
+
+
     public:
         Board();
         Sprite* getSprite();
@@ -35,6 +42,7 @@ class Board
         void    drawPieces(RenderWindow& window, vector<Player*> players);
         void    drawRolls(RenderWindow& window, const int* rolls);
         void    drawCard(RenderWindow& window, const Sprite* card, const bool clear = true, const bool display = true);
+        void    drawText(RenderWindow& window, const string text, const Color color = Color::Blue, const bool clear = true, const bool display = true);
         BOXES   boxClicked(RenderWindow& window);
         ~Board();
 };

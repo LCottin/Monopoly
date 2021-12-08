@@ -7,15 +7,47 @@ Board::Board()
 {
     _Texture.loadFromFile("./Images/Boards/monopoly.png");
     _FocusTexture.loadFromFile("./Images/Boards/Monopoly2.png");
+    _Font.loadFromFile("./Fonts/Raleway-Regular.ttf");
 
     _Sprite.setTexture(_Texture);
     _FocusSprite.setTexture(_FocusTexture);
 
-    _YesBoxPos = Vector2f(148, 628);
-    _NoBoxPos = Vector2f(298, 628);
+    _YesTextPos = Vector2f(830, 400);
+    _NoTextPos  = Vector2f(830, 600);
 
-    _YesBoxSize = Vector2f(130, 50);
-    _NoBoxSize = Vector2f(120, 50);
+    _YesBoxPos  = _YesTextPos - Vector2f(2, 2);
+    _NoBoxPos   =  _NoTextPos - Vector2f(2, 2);
+
+    _YesBoxSize = Vector2f(140, 50);
+    _NoBoxSize  = Vector2f(130, 50);
+
+    //Yes text
+    _YesText.setFont(_Font);
+    _YesText.setString("Yes / 1");
+    _YesText.setCharacterSize(40);
+    _YesText.setFillColor(Color::Black);
+    _YesText.setPosition(_YesTextPos);
+    
+    //Yes box
+    _YesBox.setSize(_YesBoxSize);
+    _YesBox.setFillColor(Color::Transparent);
+    _YesBox.setOutlineColor(Color::Black);
+    _YesBox.setOutlineThickness(5);
+    _YesBox.setPosition(_YesBoxPos);
+    
+    //No text
+    _NoText.setFont(_Font);
+    _NoText.setString("No / 2");
+    _NoText.setCharacterSize(40);
+    _NoText.setFillColor(Color::Black);
+    _NoText.setPosition(_NoTextPos);
+    
+    //No box
+    _NoBox.setSize(_NoBoxSize);
+    _NoBox.setFillColor(Color::Transparent);
+    _NoBox.setOutlineColor(Color::Black);
+    _NoBox.setOutlineThickness(5);
+    _NoBox.setPosition(_NoBoxPos);
 }
 
 /**
@@ -61,7 +93,7 @@ void Board::drawRolls(RenderWindow& window, const int* rolls)
         d1->setPosition(Vector2f(50, 250));
         d2->setPosition(Vector2f(450, 250));
 
-        window.clear();
+        drawBoard(window, true, false);
         window.draw(_FocusSprite);
         window.draw(*ch.getFocusSprite());
         window.draw(*com.getFocusSprite());
@@ -79,7 +111,7 @@ void Board::drawRolls(RenderWindow& window, const int* rolls)
     d1->setPosition(Vector2f(50, 250));
     d2->setPosition(Vector2f(450, 250));
 
-    window.clear();
+    drawBoard(window, true, false);
     window.draw(_FocusSprite);
     window.draw(*ch.getFocusSprite());
     window.draw(*com.getFocusSprite());
@@ -88,7 +120,7 @@ void Board::drawRolls(RenderWindow& window, const int* rolls)
     window.display();
 
     //sleeps for three seconds
-    sleep(seconds(3));
+    sleep(seconds(2));
 
     delete d1;
     delete d2;
@@ -102,7 +134,7 @@ void Board::drawRolls(RenderWindow& window, const int* rolls)
 void Board::drawPieces(RenderWindow& window, vector<Player*> players)
 {
     //refreshes screen before adding other things
-    drawBoard(window, true, false);
+    drawBoard(window, false, false);
     //prints each player's piece on the board
     for (size_t i = 0; i < players.size(); i++)
     {
@@ -113,7 +145,7 @@ void Board::drawPieces(RenderWindow& window, vector<Player*> players)
         window.draw(*players[i]->getPiece()->getSprite());
     }
     window.display();
-    sleep(seconds(2));
+    sleep(seconds(1));
 }
 
 /**
@@ -273,45 +305,18 @@ void Board::drawBoard(RenderWindow& window, const bool clear, const bool display
     Chances ch;
     Communities com;
 
-    Font font;
-    font.loadFromFile("Raleway-Regular.ttf");
-    
-    //Yes text
-    Text yes("YES (1)", font, 40);
-    yes.setFillColor(Color::Black);
-    yes.setPosition(150, 630);
-
-    //No text
-    Text no("NO (2)", font, 40);
-    no.setFillColor(Color::Black);
-    no.setPosition(300, 630);
-
-    //Yes box
-    RectangleShape rect1(_YesBoxSize);
-    rect1.setFillColor(Color::Transparent);
-    rect1.setOutlineColor(Color::Black);
-    rect1.setOutlineThickness(5);
-    rect1.setPosition(_YesBoxPos);
-
-    //No box
-    RectangleShape rect2(_NoBoxSize);
-    rect2.setFillColor(Color::Transparent);
-    rect2.setOutlineColor(Color::Black);
-    rect2.setOutlineThickness(5);
-    rect2.setPosition(_NoBoxPos);
-
     if (clear)
-        window.clear();
+        window.clear(Color::White);
     window.draw(_Sprite);
     window.draw(*ch.getMainSprite());
     window.draw(*com.getMainSprite());
-    window.draw(yes);
-    window.draw(no);
-    window.draw(rect1);
-    window.draw(rect2);
+    window.draw(_YesBox);
+    window.draw(_NoBox);
+    window.draw(_YesText);
+    window.draw(_NoText);
     if (display)
         window.display();
-    sleep(milliseconds(2000));
+    //sleep(milliseconds(1000));
 }
 
 /**
@@ -356,9 +361,25 @@ BOXES Board::boxClicked(RenderWindow& window)
  */
 void Board::drawCard(RenderWindow& window, const Sprite* sprite, const bool clear, const bool display)
 {
-    if (clear)
-        window.clear();
+    drawBoard(window, clear, false);
     window.draw(*sprite);
+    if (display)
+        window.display();
+    sleep(milliseconds(1000));
+}
+
+/**
+ * @brief Draws some text on the board
+ * @param window Window to draw on
+ * @param text Text to draw
+ */
+void Board::drawText(RenderWindow& window, const string text, const Color color, const bool clear, const bool display)
+{
+    Text textToDraw(text, _Font, 40);
+    textToDraw.setFillColor(color);
+    textToDraw.setPosition(Vector2f(810, 200));
+
+    window.draw(textToDraw);
     if (display)
         window.display();
 }
