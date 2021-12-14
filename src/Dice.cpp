@@ -46,7 +46,6 @@ int Dice::roll()
 
     //sets correct texture according to the number generated
     _Sprite.setTexture(_Textures[random - 1]);
-    _Sprite.setPosition(Vector2f(0, 0));
     return random;
 }
 
