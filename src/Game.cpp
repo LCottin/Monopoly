@@ -143,7 +143,7 @@ bool Game::playGame()
 
         _Board->drawBoard(_Window);
         _Board->drawPieces(_Window, playersCopy);
-        _Board->drawText(_Window, message, Color::Blue, false);
+        _Board->drawTurn(_Window, _TotalTurns);
 
         sleep(milliseconds(1000));
         //TODO: implements prison before next turn

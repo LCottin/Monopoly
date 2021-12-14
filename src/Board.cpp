@@ -373,13 +373,26 @@ void Board::drawCard(RenderWindow& window, const Sprite* sprite, const bool clea
  * @param window Window to draw on
  * @param text Text to draw
  */
-void Board::drawText(RenderWindow& window, const string text, const Color color, const bool clear, const bool display)
+void Board::drawText(RenderWindow& window, const Vector2f pos, const string text, const Color color, const bool clear, const bool display)
 {
     Text textToDraw(text, _Font, 40);
     textToDraw.setFillColor(color);
-    textToDraw.setPosition(Vector2f(810, 200));
+    textToDraw.setPosition(pos);
 
     window.draw(textToDraw);
+    if (display)
+        window.display();
+}
+
+/**
+ * @brief Draws current turn
+ * @param window Window to draw on
+ * @param turn Current turn
+ */
+void Board::drawTurn(RenderWindow& window, const int turn, const bool clear, const bool display)
+{
+    drawBoard(window, clear, false);
+    drawText(window, Vector2f(820, 50), "Turn : " + to_string(turn), Color::Blue, false, false);
     if (display)
         window.display();
 }
