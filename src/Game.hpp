@@ -28,11 +28,12 @@ class Game
         int             _CurrentTurn;
         int             _TotalTurns;
 
-    public:
-        Game();
         void getNbPlayers();
         House* getHouse(string name);
         House* getHouse(PLACES place);
+        
+    public:
+        Game();
         bool playGame();
         ~Game();
 };
