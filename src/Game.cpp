@@ -129,6 +129,8 @@ bool Game::playGame()
         _TotalTurns++;
 
         Event event;
+        bool replay = false;
+        int doubles = 0;
 
         while (_Window.pollEvent(event))
         {
@@ -139,6 +141,7 @@ bool Game::playGame()
             }
         } 
 
+        replay: //replayes the turn if the player made a double 
         _Board->setCurrentPlayer(_CurrentPlayer);
         _Board->drawBoard();
         _Board->drawPieces(playersCopy);
@@ -148,8 +151,30 @@ bool Game::playGame()
         /* =========================== */
         /* STEP 1 : player rolls dices */
         /* =========================== */
-        //FIXME: implements three doubles in a row to go to prison 
         int* rolls = _CurrentPlayer->rollDices(_Dice1, _Dice2);
+
+        //if doubles, player replays
+        replay = (rolls[0] == rolls[1]);
+        if (replay)
+        {
+            cout << "Doubles ! You can play again at the end of your turn." << endl;
+            doubles++;
+            //if doubles == 2, player goes to prison
+            if (doubles == 2)
+            {
+                cout << "Three doubles in a row : you have been sent jail ! " << endl;
+                _CurrentPlayer->setInJail(true);
+                _CurrentPlayer->move(JAIL);
+                _Board->drawBoard();
+                _Board->drawPieces(playersCopy);
+                replay = false;
+                doubles = 0;
+                sleep(milliseconds(1000));
+                continue;
+            }
+        }
+        else
+            doubles = 0;
 
         /* ===================================== */
         /* STEP 2 : prints rolling on the screen */
@@ -199,6 +224,11 @@ bool Game::playGame()
                     }
             }
             _Board->drawPieces(playersCopy);
+            if (replay)
+            {
+                sleep(milliseconds(1000));
+                goto replay;
+            }
             continue;
         }
 
@@ -241,6 +271,11 @@ bool Game::playGame()
             }
 
             _Board->drawPieces(playersCopy);
+            if (replay)
+            {
+                sleep(milliseconds(1000));
+                goto replay;
+            }
             continue;
         }
 
@@ -248,6 +283,11 @@ bool Game::playGame()
         if (place == JAIL)
         {
             cout << "You are visiting the prison." << endl;
+            if (replay)
+            {
+                sleep(milliseconds(1000));
+                goto replay;
+            }
             continue;
         }
 
@@ -255,6 +295,11 @@ bool Game::playGame()
         if (place == FREE_PARKING)
         {
             cout << "You are resting on free parking." << endl;
+            if (replay)
+            {
+                sleep(milliseconds(1000));
+                goto replay;
+            }
             continue;
         }
 
@@ -265,6 +310,11 @@ bool Game::playGame()
             _Communities->execute(_Bank, _CurrentPlayer, playersCopy);
             sleep(milliseconds(3000));
             _Board->drawPieces(playersCopy);
+            if (replay)
+            {
+                sleep(milliseconds(1000));
+                goto replay;
+            }
             continue;
         }
 
@@ -275,6 +325,11 @@ bool Game::playGame()
             _Chances->execute(_Bank, _CurrentPlayer, playersCopy);
             sleep(milliseconds(3000));
             _Board->drawPieces(playersCopy);
+            if (replay)
+            {
+                sleep(milliseconds(1000));
+                goto replay;
+            }
             continue;
         }
 
@@ -370,6 +425,12 @@ bool Game::playGame()
                 }
             }
         }
+        if (replay)
+        {
+            sleep(milliseconds(1000));
+            goto replay;
+        }
+        continue;
     }
     return true;
 }
