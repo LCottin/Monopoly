@@ -159,7 +159,7 @@ bool Game::playGame()
         /* =========================== */
         /* STEP 3 : player moves piece */
         /* =========================== */
-        bool go = _CurrentPlayer->move();
+        const bool go = _CurrentPlayer->move();
         if (go)
             _CurrentPlayer->go(_Bank);
 
@@ -171,9 +171,10 @@ bool Game::playGame()
         /* =========================================== */
         /* STEP 5 : player acts according to the place */
         /* =========================================== */
+        const int place = _CurrentPlayer->getPosition();
 
         // Checks if the player should go to jail
-        if (_CurrentPlayer->getPosition() == GO_TO_JAIL)
+        if (place == GO_TO_JAIL)
         {
             _CurrentPlayer->setInJail(true);
             _CurrentPlayer->move(JAIL);
@@ -182,7 +183,7 @@ bool Game::playGame()
         }
 
         // Checks if the player is on LUXURY_TAX
-        if (_CurrentPlayer->getPosition() == LUXURY_TAX)
+        if (place == LUXURY_TAX)
         {
             if (!_CurrentPlayer->payBank(_Bank, 75))
             {
@@ -202,7 +203,7 @@ bool Game::playGame()
         }
 
         // Checks if the player is on INCOME_TAX
-        if (_CurrentPlayer->getPosition() == INCOME_TAX)
+        if (place == INCOME_TAX)
         {
             cout << "You have to choose to pay 200 or 10% of your total worth." << endl;
             cout << "1. Pay 200" << endl;
@@ -244,21 +245,21 @@ bool Game::playGame()
         }
 
         // Checks if the player is paying a visit to the prison
-        if (_CurrentPlayer->getPosition() == JAIL)
+        if (place == JAIL)
         {
             cout << "You are visiting the prison." << endl;
             continue;
         }
 
         // Checks if the player is on FREE_PARKING
-        if (_CurrentPlayer->getPosition() == FREE_PARKING)
+        if (place == FREE_PARKING)
         {
             cout << "You are resting on free parking." << endl;
             continue;
         }
 
         // Checks if the player is on COMMUNITY_CHEST
-        if (_CurrentPlayer->getPosition() == COMMUNITY_CHEST_1 || _CurrentPlayer->getPosition() == COMMUNITY_CHEST_2 || _CurrentPlayer->getPosition() == COMMUNITY_CHEST_3)
+        if (place == COMMUNITY_CHEST_1 || place == COMMUNITY_CHEST_2 || place == COMMUNITY_CHEST_3)
         {
             _Board->drawCard(_Communities->drawCard(), false);
             _Communities->execute(_Bank, _CurrentPlayer, playersCopy);
@@ -268,7 +269,7 @@ bool Game::playGame()
         }
 
         // Checks if the player is on CHANCE_CARD
-        if (_CurrentPlayer->getPosition() == CHANCE_1 || _CurrentPlayer->getPosition() == CHANCE_2 || _CurrentPlayer->getPosition() == CHANCE_3)
+        if (place == CHANCE_1 || place == CHANCE_2 || place == CHANCE_3)
         {
             _Board->drawCard(_Chances->drawCard(), false);
             _Chances->execute(_Bank, _CurrentPlayer, playersCopy);
@@ -277,7 +278,7 @@ bool Game::playGame()
             continue;
         }
 
-        House* currentHouse = getHouse((PLACES)_CurrentPlayer->getPosition());
+        House* currentHouse = getHouse((PLACES)place);
 
         // makes sure the player is on a house
         if (currentHouse == nullptr)    
@@ -331,7 +332,7 @@ bool Game::playGame()
                 bool ok;
 
                 // If the player is on WATER_WORKS or ELECTRIC_COMPANY
-                if (_CurrentPlayer->getPosition() == WATER_WORKS || _CurrentPlayer->getPosition() == ELECTRIC_COMPANY)
+                if (place == WATER_WORKS || place == ELECTRIC_COMPANY)
                 {
                     Player* waterWorksOwner      = getHouse(WATER_WORKS)->getOwner();
                     Player* electricCompanyOwner = getHouse(ELECTRIC_COMPANY)->getOwner();
@@ -342,7 +343,7 @@ bool Game::playGame()
                     else 
                         amount *= 4;
                     
-                    if (_CurrentPlayer->getPosition() == WATER_WORKS)
+                    if (place == WATER_WORKS)
                         ok = _CurrentPlayer->payRent(waterWorksOwner, amount);
                     
                     else 
