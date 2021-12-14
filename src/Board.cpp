@@ -3,13 +3,54 @@
 /**
  * Default constructor
  */
-Board::Board()
+Board::Board(RenderWindow* window, int* currentTurn)
 {
     _Texture.loadFromFile("./Images/Boards/monopoly.png");
     _FocusTexture.loadFromFile("./Images/Boards/Monopoly2.png");
+    _Font.loadFromFile("./Fonts/Raleway-Regular.ttf");
 
     _Sprite.setTexture(_Texture);
     _FocusSprite.setTexture(_FocusTexture);
+
+    _Window      = window;
+    _CurrentTurn = currentTurn;
+
+    _YesTextPos = Vector2f(830, 500);
+    _NoTextPos  = Vector2f(830, 600);
+
+    _YesBoxPos  = _YesTextPos - Vector2f(2, 2);
+    _NoBoxPos   =  _NoTextPos - Vector2f(2, 2);
+
+    _YesBoxSize = Vector2f(140, 50);
+    _NoBoxSize  = Vector2f(130, 50);
+
+    //Yes text
+    _YesText.setFont(_Font);
+    _YesText.setString("Yes / 1");
+    _YesText.setCharacterSize(40);
+    _YesText.setFillColor(Color::Black);
+    _YesText.setPosition(_YesTextPos);
+    
+    //Yes box
+    _YesBox.setSize(_YesBoxSize);
+    _YesBox.setFillColor(Color::Transparent);
+    _YesBox.setOutlineColor(Color::Black);
+    _YesBox.setOutlineThickness(5);
+    _YesBox.setPosition(_YesBoxPos);
+    
+    //No text
+    _NoText.setFont(_Font);
+    _NoText.setString("No / 2");
+    _NoText.setCharacterSize(40);
+    _NoText.setFillColor(Color::Black);
+    _NoText.setPosition(_NoTextPos);
+    
+    //No box
+    _NoBox.setSize(_NoBoxSize);
+    _NoBox.setFillColor(Color::Transparent);
+    _NoBox.setOutlineColor(Color::Black);
+    _NoBox.setOutlineThickness(5);
+    _NoBox.setPosition(_NoBoxPos);
 }
 
 /**
@@ -33,11 +74,15 @@ Sprite* Board::getOtherSprite()
  * @param window Window to update
  * @param rolls Array with the result of the rolling
  */
-void Board::drawRolls(RenderWindow& window, const int* rolls)
+void Board::drawRolls(const int* rolls)
 {
     //creates two artifial dices
     Dice* d1 = new Dice();
     Dice* d2 = new Dice();
+
+    //sets the position of the dices
+    d1->setPosition(Vector2f(50, 250));
+    d2->setPosition(Vector2f(450, 250));
 
     //Creates two artificial cards
     Chances ch;
@@ -47,42 +92,39 @@ void Board::drawRolls(RenderWindow& window, const int* rolls)
     for (size_t i = 0; i < 20; i++)
     {
         //2 : changes framerate 
-        window.setFramerateLimit(20 - i);
+        _Window->setFramerateLimit(20 - i);
         
         d1->roll();
         d2->roll();
 
-        d1->setPosition(Vector2f(50, 250));
-        d2->setPosition(Vector2f(450, 250));
-
-        window.clear();
-        window.draw(_FocusSprite);
-        window.draw(*ch.getFocusSprite());
-        window.draw(*com.getFocusSprite());
-        window.draw(*d1->getSprite());
-        window.draw(*d2->getSprite());
-        window.display();
+        drawBoard(true, false);
+        _Window->draw(_FocusSprite);
+        _Window->draw(*ch.getFocusSprite());
+        _Window->draw(*com.getFocusSprite());
+        _Window->draw(*d1->getSprite());
+        _Window->draw(*d2->getSprite());
+        _Window->display();
 
         //sleeps to slow down 
         sleep(milliseconds(100));
     }
     //3 : sets back framerate
-    window.setFramerateLimit(10);
+    _Window->setFramerateLimit(10);
 
     //4 : prints real numbers 
     d1->setPosition(Vector2f(50, 250));
     d2->setPosition(Vector2f(450, 250));
 
-    window.clear();
-    window.draw(_FocusSprite);
-    window.draw(*ch.getFocusSprite());
-    window.draw(*com.getFocusSprite());
-    window.draw(*d1->getSprite(rolls[0]));
-    window.draw(*d2->getSprite(rolls[1]));
-    window.display();
+    drawBoard(true, false);
+    _Window->draw(_FocusSprite);
+    _Window->draw(*ch.getFocusSprite());
+    _Window->draw(*com.getFocusSprite());
+    _Window->draw(*d1->getSprite(rolls[0]));
+    _Window->draw(*d2->getSprite(rolls[1]));
+    _Window->display();
 
     //sleeps for three seconds
-    sleep(seconds(3));
+    sleep(seconds(2));
 
     delete d1;
     delete d2;
@@ -93,21 +135,21 @@ void Board::drawRolls(RenderWindow& window, const int* rolls)
  * @param window Window to update
  * @param players Vector containing every player
  */
-void Board::drawPieces(RenderWindow& window, vector<Player*> players)
+void Board::drawPieces(vector<Player*> players)
 {
     //refreshes screen before adding other things
-    drawBoard(window, true, false);
+    drawBoard(true, false);
     //prints each player's piece on the board
     for (size_t i = 0; i < players.size(); i++)
     {
         //moves the piece ...
-        movePiece(window, players[i]);
+        movePiece(players[i]);
 
         //...then displays it
-        window.draw(*players[i]->getPiece()->getSprite());
+        _Window->draw(*players[i]->getPiece()->getSprite());
     }
-    window.display();
-    sleep(seconds(2));
+    _Window->display();
+    sleep(seconds(1));
 }
 
 /**
@@ -115,7 +157,7 @@ void Board::drawPieces(RenderWindow& window, vector<Player*> players)
  * @param window Window to update
  * @param player Player owning the piece
  */
-void Board::movePiece(RenderWindow& window, Player* player)
+void Board::movePiece(Player* player)
 {
     int pos      = player->getPosition();
     Piece* piece = player->getPiece();
@@ -262,18 +304,77 @@ void Board::movePiece(RenderWindow& window, Player* player)
  * Draws the board and the cards on it
  * @param window Window to draw on
  */
-void Board::drawBoard(RenderWindow& window, const bool clear, const bool display)
+void Board::drawBoard(const bool clear, const bool display)
 {
     Chances ch;
     Communities com;
 
     if (clear)
-        window.clear();
-    window.draw(_Sprite);
-    window.draw(*ch.getMainSprite());
-    window.draw(*com.getMainSprite());
+        _Window->clear(Color::White);
+    _Window->draw(_Sprite);
+    _Window->draw(*ch.getMainSprite());
+    _Window->draw(*com.getMainSprite());
+    _Window->draw(_YesBox);
+    _Window->draw(_NoBox);
+    _Window->draw(_YesText);
+    _Window->draw(_NoText);
+
+    // Draws the turn
+    drawText(Vector2f(820, 50), "Turn : ", Color::Black, false, false);
+    drawText(Vector2f(840, 80), to_string(*_CurrentTurn), Color::Blue, false, false);
+    
+    // Draw info about the player
+    drawText(Vector2f(820, 130), "Player : ", Color::Black, false, false);
+    drawText(Vector2f(840, 160), _CurrentPlayer->getName(), Color::Blue, false, false);
+    drawText(Vector2f(820, 210), "Money : ", Color::Black, false, false);
+    drawText(Vector2f(840, 240), to_string(_CurrentPlayer->getMoney()), Color::Blue, false, false);
+
     if (display)
-        window.display();
+        _Window->display();
+}
+
+/**
+ * @brief Sets current player
+ * @param player Player to set
+ */
+void Board::setCurrentPlayer(Player *player)
+{
+    _CurrentPlayer = player;
+}
+
+/**
+ * @brief Indicates which box the player clicked on
+ * @param window Window to draw on
+ * @returns The box the player clicked on
+ */
+BOXES Board::boxClicked()
+{
+    Event event;
+    while(true)
+    {
+        while (_Window->pollEvent(event))
+        {
+            if (event.type == Event::Closed)
+            {
+                _Window->close();
+                return EXIT;
+            }
+            if (event.type == Event::MouseButtonPressed)
+            {
+                if (event.mouseButton.button == Mouse::Left)
+                {
+                    //Returns the box the player clicked on
+                    Vector2i mousPos = Mouse::getPosition(*_Window);
+                    if (mousPos.x >= _YesBoxPos.x && mousPos.x <= _YesBoxPos.x + _YesBoxSize.x &&
+                        mousPos.y >= _YesBoxPos.y && mousPos.y <= _YesBoxPos.y + _YesBoxSize.y)
+                        return YES;
+                    else if (mousPos.x >= _NoBoxPos.x && mousPos.x <= _NoBoxPos.x + _NoBoxSize.x &&
+                            mousPos.y >= _NoBoxPos.y && mousPos.y <= _NoBoxPos.y + _NoBoxSize.y)
+                        return NO;
+                }
+            }
+        }
+    }
 }
 
 /**
@@ -281,13 +382,29 @@ void Board::drawBoard(RenderWindow& window, const bool clear, const bool display
  * @param window Window to draw on
  * @param sprite Sprite to draw
  */
-void Board::drawCard(RenderWindow& window, const Sprite* sprite, const bool clear, const bool display)
+void Board::drawCard(const Sprite* sprite, const bool clear, const bool display)
 {
-    if (clear)
-        window.clear();
-    window.draw(*sprite);
+    drawBoard(clear, false);
+    _Window->draw(*sprite);
     if (display)
-        window.display();
+        _Window->display();
+    sleep(milliseconds(1000));
+}
+
+/**
+ * @brief Draws some text on the board
+ * @param window Window to draw on
+ * @param text Text to draw
+ */
+void Board::drawText(const Vector2f pos, const string text, const Color color, const bool clear, const bool display)
+{
+    Text textToDraw(text, _Font, 40);
+    textToDraw.setFillColor(color);
+    textToDraw.setPosition(pos);
+
+    _Window->draw(textToDraw);
+    if (display)
+        _Window->display();
 }
 
 /**

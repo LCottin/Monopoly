@@ -35,6 +35,7 @@ Player::Player(const string name)
     _Alive      = true;
     _Position   = GO;
     _Assets     = _Money;
+    _InJail     = false;
 
     string answer;
     TYPES type;
@@ -117,6 +118,7 @@ Player::Player(const string name, const TYPES piece)
     _Money      = 2000;
     _Alive      = true;
     _Position   = GO;
+    _InJail     = false;
 
     _Piece = new Piece(piece);
 }

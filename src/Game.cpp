@@ -5,15 +5,16 @@
  */
 Game::Game()
 {
-    _Window.create(VideoMode(800, 800), "Monopoly game !");
+    _Window.create(VideoMode(1000, 800), "Monopoly game !");
     _Window.setFramerateLimit(10);
 
     _NbPlayers      = -1;
     _CurrentTurn    = 0;
+    _TotalTurns     = 0;
 
     _Dice1          = new Dice();
     _Dice2          = new Dice();
-    _Board          = new Board();
+    _Board          = new Board(&_Window, &_TotalTurns);
     _Bank           = new Bank();
     _Chances        = new Chances();
     _Communities    = new Communities();
@@ -119,10 +120,13 @@ bool Game::playGame()
 {
     getNbPlayers();
 
+    vector<Player*> playersCopy = _Players;
+
     while (_Window.isOpen())
     {
+        _CurrentPlayer  = playersCopy[_CurrentTurn];
         _CurrentTurn    = (_CurrentTurn + 1) % _NbPlayers;
-        _CurrentPlayer  = _Players[_CurrentTurn];
+        _TotalTurns++;
 
         Event event;
 
@@ -135,11 +139,11 @@ bool Game::playGame()
             }
         } 
 
+        _Board->setCurrentPlayer(_CurrentPlayer);
+        _Board->drawBoard();
+        _Board->drawPieces(playersCopy);
+
         sleep(milliseconds(1000));
-
-        _Board->drawBoard(_Window);
-        _Board->drawPieces(_Window, _Players);
-
         //TODO: implements prison before next turn
         /* =========================== */
         /* STEP 1 : player rolls dices */
@@ -150,7 +154,7 @@ bool Game::playGame()
         /* ===================================== */
         /* STEP 2 : prints rolling on the screen */
         /* ===================================== */
-        _Board->drawRolls(_Window, rolls);
+        _Board->drawRolls(rolls);
 
         /* =========================== */
         /* STEP 3 : player moves piece */
@@ -162,7 +166,7 @@ bool Game::playGame()
         /* ====================================== */
         /* STEP 4 : updates position on the board */
         /* ====================================== */
-        _Board->drawPieces(_Window, _Players);
+        _Board->drawPieces(playersCopy);
 
         /* =========================================== */
         /* STEP 5 : player acts according to the place */
@@ -173,7 +177,7 @@ bool Game::playGame()
         {
             _CurrentPlayer->setInJail(true);
             _CurrentPlayer->move(JAIL);
-            _Board->drawPieces(_Window, _Players);
+            _Board->drawPieces(playersCopy);
             continue;
         }
 
@@ -184,16 +188,16 @@ bool Game::playGame()
             {
                 cout << "You don't have enough money to pay the tax. You lose." << endl;
                 cout << "You are eliminated from the game." << endl;
-                    _Players.erase(_Players.begin() + _CurrentTurn);
+                    playersCopy.erase(playersCopy.begin() + _CurrentTurn);
                     _NbPlayers--;
 
                     if (_NbPlayers == 1)
                     {
-                        cout << "The winner is " << _Players[0]->getName() << " !" << endl;
+                        cout << "The winner is " << playersCopy[0]->getName() << " !" << endl;
                         return true;
                     }
             }
-            _Board->drawPieces(_Window, _Players);
+            _Board->drawPieces(playersCopy);
             continue;
         }
 
@@ -205,42 +209,37 @@ bool Game::playGame()
             cout << "2. Pay 10% of your total worth" << endl;
             cout << "Your choice : ";
             bool ok = false;
-            int choice;
-            do
-            {   choice = -1;
-                string answer;
-                getline(cin, answer);
-                choice = stoi(answer);
-                if (choice == 1)
-                {
-                    cout << "You pay 200." << endl;
-                    ok = _CurrentPlayer->payBank(_Bank, 200);
-                }
-                else if (choice == 2)
-                {
-                    int assets = _CurrentPlayer->getAssets();
-                    cout << "Your total worth is " << assets << endl;
-                    cout << "You have to pay " << assets * 0.1 << endl;
-                    ok = _CurrentPlayer->payBank(_Bank, assets * 0.1);
-                }
-            } while (choice != 1 && choice != 2);
-            
+
+            BOXES box = _Board->boxClicked();
+            if (box == YES)
+            {
+                cout << "You pay 200." << endl;
+                ok = _CurrentPlayer->payBank(_Bank, 200);
+            }
+            else if (box == NO)
+            {
+                int assets = _CurrentPlayer->getAssets();
+                cout << "Your total worth is " << assets << endl;
+                cout << "You have to pay " << assets / 10 << endl;
+                ok = _CurrentPlayer->payBank(_Bank, assets / 10);
+            }
+        
             //if the players couldn't pay the tax, he is eliminated from the game
             if (ok == false)
             {
                 cout << "You don't have enough money to pay the tax. You lose." << endl;
                 cout << "You are eliminated from the game." << endl;
-                _Players.erase(_Players.begin() + _CurrentTurn);
+                playersCopy.erase(playersCopy.begin() + _CurrentTurn);
                 _NbPlayers--;
 
                 if (_NbPlayers == 1)
                 {
-                    cout << "The winner is " << _Players[0]->getName() << " !" << endl;
+                    cout << "The winner is " << playersCopy[0]->getName() << " !" << endl;
                     return true;
                 }
             }
 
-            _Board->drawPieces(_Window, _Players);
+            _Board->drawPieces(playersCopy);
             continue;
         }
 
@@ -261,20 +260,20 @@ bool Game::playGame()
         // Checks if the player is on COMMUNITY_CHEST
         if (_CurrentPlayer->getPosition() == COMMUNITY_CHEST_1 || _CurrentPlayer->getPosition() == COMMUNITY_CHEST_2 || _CurrentPlayer->getPosition() == COMMUNITY_CHEST_3)
         {
-            _Board->drawCard(_Window, _Communities->drawCard(), false);
-            _Communities->execute(_Bank, _CurrentPlayer, _Players);
+            _Board->drawCard(_Communities->drawCard(), false);
+            _Communities->execute(_Bank, _CurrentPlayer, playersCopy);
             sleep(milliseconds(3000));
-            _Board->drawPieces(_Window, _Players);
+            _Board->drawPieces(playersCopy);
             continue;
         }
 
         // Checks if the player is on CHANCE_CARD
         if (_CurrentPlayer->getPosition() == CHANCE_1 || _CurrentPlayer->getPosition() == CHANCE_2 || _CurrentPlayer->getPosition() == CHANCE_3)
         {
-            _Board->drawCard(_Window, _Chances->drawCard(), false);
-            _Chances->execute(_Bank, _CurrentPlayer, _Players);
+            _Board->drawCard(_Chances->drawCard(), false);
+            _Chances->execute(_Bank, _CurrentPlayer, playersCopy);
             sleep(milliseconds(3000));
-            _Board->drawPieces(_Window, _Players);
+            _Board->drawPieces(playersCopy);
             continue;
         }
 
@@ -292,13 +291,16 @@ bool Game::playGame()
         {
             cout << "No owner." << endl;
             cout << "You currently have " << _CurrentPlayer->getMoney() << " dollars." << endl;
-            cout << "Do you want to buy this house ? (y/n)" << endl;
-            string answer;
-            getline(cin, answer);
-            if (answer == "y" || answer == "Y")
+            cout << "Do you want to buy this house ? Click on the box." << endl;
+            BOXES box = _Board->boxClicked();
+            if (box == YES)
             {
                 if (!_CurrentPlayer->buy(currentHouse))
                     cout << "You can't buy this house." << endl;
+            }
+            else if (box == NO)
+            {
+                cout << "You don't buy this house." << endl;
             }
         }
 
@@ -310,12 +312,16 @@ bool Game::playGame()
             {
                 cout << "You are at home, you already own this house" << endl;
                 cout << "You currently have " << _CurrentPlayer->getMoney() << " dollars." << endl;
-                cout << "Do you want to sell this house ? (y/n)" << endl;
-                string answer;
-                getline(cin, answer);
-                if (answer == "y" || answer == "Y")
+                cout << "Do you want to sell this house ? Click on the box." << endl;
+                BOXES box = _Board->boxClicked();
+                if (box == YES)
                 {
-                    _CurrentPlayer->sell(currentHouse);
+                    if (!_CurrentPlayer->sell(currentHouse))
+                        cout << "You can't sell this house." << endl;
+                }
+                else if (box == NO)
+                {
+                    cout << "You don't sell this house." << endl;
                 }
             }
 
@@ -352,19 +358,17 @@ bool Game::playGame()
                 {
                     cout << "You don't have enough money to pay the rent." << endl;
                     cout << "You are eliminated from the game." << endl;
-                    _Players.erase(_Players.begin() + _CurrentTurn);
+                    playersCopy.erase(playersCopy.begin() + _CurrentTurn);
                     _NbPlayers--;
 
                     if (_NbPlayers == 1)
                     {
-                        cout << "The winner is " << _Players[0]->getName() << " !" << endl;
+                        cout << "The winner is " << playersCopy[0]->getName() << " !" << endl;
                         return true;
                     }
                 }
             }
         }
-        //uncomments to run one turn 
-        //return true;
     }
     return true;
 }
