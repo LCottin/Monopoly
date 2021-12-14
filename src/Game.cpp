@@ -5,7 +5,7 @@
  */
 Game::Game()
 {
-    _Window.create(VideoMode(1000, 800), "Monopoly game !");
+    _Window.create(VideoMode(1200, 800), "Monopoly game !");
     _Window.setFramerateLimit(10);
 
     _NbPlayers      = -1;
@@ -254,6 +254,11 @@ bool Game::playGame()
                 cout << "You have to pay " << assets / 10 << endl;
                 ok = _CurrentPlayer->payBank(_Bank, assets / 10);
             }
+            else if (box == EXIT)
+            {
+                cout << "You leave the game." << endl;
+                return true;
+            }
         
             //if the players couldn't pay the tax, he is eliminated from the game
             if (ok == false)
@@ -345,6 +350,7 @@ bool Game::playGame()
         // if the player is on an non-sold house, he can buy it
         if (currentHouse->getOwner() == nullptr)
         {
+            _Board->drawText(Vector2f(810, 500), "No owner.\nDo you want to buy it ?", Color::Blue, 30, true, true);
             cout << "No owner." << endl;
             cout << "You currently have " << _CurrentPlayer->getMoney() << " dollars." << endl;
             cout << "Do you want to buy this house ? Click on the box." << endl;
@@ -357,6 +363,11 @@ bool Game::playGame()
             else if (box == NO)
             {
                 cout << "You don't buy this house." << endl;
+            }
+            else if (box == EXIT)
+            {
+                cout << "You leave the game." << endl;
+                return true;
             }
         }
 
@@ -378,6 +389,11 @@ bool Game::playGame()
                 else if (box == NO)
                 {
                     cout << "You don't sell this house." << endl;
+                }
+                else if (box == EXIT)
+                {
+                    cout << "You leave the game." << endl;
+                    return true;
                 }
             }
 
