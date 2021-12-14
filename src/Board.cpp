@@ -15,8 +15,8 @@ Board::Board(RenderWindow* window, int* currentTurn)
     _Window      = window;
     _CurrentTurn = currentTurn;
 
-    _YesTextPos = Vector2f(830, 500);
-    _NoTextPos  = Vector2f(830, 600);
+    _YesTextPos = Vector2f(930, 600);
+    _NoTextPos  = Vector2f(935, 700);
 
     _YesBoxPos  = _YesTextPos - Vector2f(2, 2);
     _NoBoxPos   =  _NoTextPos - Vector2f(2, 2);
@@ -320,14 +320,14 @@ void Board::drawBoard(const bool clear, const bool display)
     _Window->draw(_NoText);
 
     // Draws the turn
-    drawText(Vector2f(820, 50), "Turn : ", Color::Black, false, false);
-    drawText(Vector2f(840, 80), to_string(*_CurrentTurn), Color::Blue, false, false);
+    drawText(Vector2f(820, 50), "Turn : ", Color::Black, 40, false, false);
+    drawText(Vector2f(970, 50), to_string(*_CurrentTurn), Color::Blue, 40, false, false);
     
     // Draw info about the player
-    drawText(Vector2f(820, 130), "Player : ", Color::Black, false, false);
-    drawText(Vector2f(840, 160), _CurrentPlayer->getName(), Color::Blue, false, false);
-    drawText(Vector2f(820, 210), "Money : ", Color::Black, false, false);
-    drawText(Vector2f(840, 240), to_string(_CurrentPlayer->getMoney()), Color::Blue, false, false);
+    drawText(Vector2f(820, 130), "Player : ", Color::Black, 40, false, false);
+    drawText(Vector2f(970, 130), _CurrentPlayer->getName(), Color::Blue, 40, false, false);
+    drawText(Vector2f(820, 210), "Money : ", Color::Black, 40, false, false);
+    drawText(Vector2f(970, 210), to_string(_CurrentPlayer->getMoney()) + " $", Color::Blue, 40, false, false);
 
     if (display)
         _Window->display();
@@ -396,11 +396,38 @@ void Board::drawCard(const Sprite* sprite, const bool clear, const bool display)
  * @param window Window to draw on
  * @param text Text to draw
  */
-void Board::drawText(const Vector2f pos, const string text, const Color color, const bool clear, const bool display)
+void Board::drawText(const Vector2f pos, const string text, const Color color, const int size, const bool clear, const bool display)
 {
-    Text textToDraw(text, _Font, 40);
+    Text textToDraw(text, _Font, size);
     textToDraw.setFillColor(color);
     textToDraw.setPosition(pos);
+
+    if (clear)
+    {
+        Chances ch;
+        Communities com;
+
+        _Window->clear(Color::White);
+        _Window->draw(_Sprite);
+        _Window->draw(*ch.getMainSprite());
+        _Window->draw(*com.getMainSprite());
+        _Window->draw(_YesBox);
+        _Window->draw(_NoBox);
+        _Window->draw(_YesText);
+        _Window->draw(_NoText);
+
+        //drawPieces();
+
+        // Draws the turn
+        drawText(Vector2f(820, 50), "Turn : ", Color::Black, 40, false, false);
+        drawText(Vector2f(970, 50), to_string(*_CurrentTurn), Color::Blue, 40, false, false);
+        
+        // Draw info about the player
+        drawText(Vector2f(820, 130), "Player : ", Color::Black, 40, false, false);
+        drawText(Vector2f(970, 130), _CurrentPlayer->getName(), Color::Blue, 40, false, false);
+        drawText(Vector2f(820, 210), "Money : ", Color::Black, 40, false, false);
+        drawText(Vector2f(970, 210), to_string(_CurrentPlayer->getMoney()) + " $", Color::Blue, 40, false, false);
+    }
 
     _Window->draw(textToDraw);
     if (display)

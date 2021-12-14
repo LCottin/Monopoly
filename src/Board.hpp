@@ -46,7 +46,7 @@ class Board
         void    drawPieces(vector<Player*> players);
         void    drawRolls(const int* rolls);
         void    drawCard(const Sprite* card, const bool clear = true, const bool display = true);
-        void    drawText(const Vector2f pos, const string text, const Color color = Color::Blue, const bool clear = true, const bool display = true);
+        void    drawText(const Vector2f pos, const string text, const Color color = Color::Blue, const int size = 40, const bool clear = true, const bool display = true);
         BOXES   boxClicked();
         ~Board();
 };
