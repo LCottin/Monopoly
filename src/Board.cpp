@@ -3,7 +3,7 @@
 /**
  * Default constructor
  */
-Board::Board(RenderWindow* window, int* currentTurn)
+Board::Board(RenderWindow* window, vector<Player*>* players, int* turn)
 {
     _Texture.loadFromFile("./Images/Boards/monopoly.png");
     _FocusTexture.loadFromFile("./Images/Boards/Monopoly2.png");
@@ -13,7 +13,8 @@ Board::Board(RenderWindow* window, int* currentTurn)
     _FocusSprite.setTexture(_FocusTexture);
 
     _Window      = window;
-    _CurrentTurn = currentTurn;
+    _CurrentTurn = turn;
+    _Players     = players;
 
     _YesTextPos = Vector2f(930, 600);
     _NoTextPos  = Vector2f(935, 700);
@@ -26,7 +27,7 @@ Board::Board(RenderWindow* window, int* currentTurn)
 
     //Yes text
     _YesText.setFont(_Font);
-    _YesText.setString("Yes / 1");
+    _YesText.setString("Yes ( 1 )");
     _YesText.setCharacterSize(40);
     _YesText.setFillColor(Color::Black);
     _YesText.setPosition(_YesTextPos);
@@ -40,7 +41,7 @@ Board::Board(RenderWindow* window, int* currentTurn)
     
     //No text
     _NoText.setFont(_Font);
-    _NoText.setString("No / 2");
+    _NoText.setString("No ( 2 )");
     _NoText.setCharacterSize(40);
     _NoText.setFillColor(Color::Black);
     _NoText.setPosition(_NoTextPos);
@@ -51,6 +52,27 @@ Board::Board(RenderWindow* window, int* currentTurn)
     _NoBox.setOutlineColor(Color::Black);
     _NoBox.setOutlineThickness(5);
     _NoBox.setPosition(_NoBoxPos);
+
+    //Turn text
+    _Turn.setFont(_Font);
+    _Turn.setString("Turn : ");
+    _Turn.setCharacterSize(40);
+    _Turn.setPosition(Vector2f(820, 50));
+    _Turn.setFillColor(Color::Black);
+
+    //Pseudo text
+    _Pseudo.setFont(_Font);
+    _Pseudo.setString("Pseudo : ");
+    _Pseudo.setCharacterSize(40);
+    _Pseudo.setPosition(Vector2f(820, 130));
+    _Pseudo.setFillColor(Color::Black);
+
+    //Money text
+    _Money.setFont(_Font);
+    _Money.setString("Money : ");
+    _Money.setCharacterSize(40);
+    _Money.setPosition(Vector2f(820, 210));
+    _Money.setFillColor(Color::Black);
 }
 
 /**
@@ -97,12 +119,13 @@ void Board::drawRolls(const int* rolls)
         d1->roll();
         d2->roll();
 
-        drawBoard(true, false);
+        _Window->clear(Color::White);
         _Window->draw(_FocusSprite);
         _Window->draw(*ch.getFocusSprite());
         _Window->draw(*com.getFocusSprite());
         _Window->draw(*d1->getSprite());
         _Window->draw(*d2->getSprite());
+        drawAround();
         _Window->display();
 
         //sleeps to slow down 
@@ -115,12 +138,14 @@ void Board::drawRolls(const int* rolls)
     d1->setPosition(Vector2f(50, 250));
     d2->setPosition(Vector2f(450, 250));
 
-    drawBoard(true, false);
+
+    _Window->clear(Color::White);
     _Window->draw(_FocusSprite);
     _Window->draw(*ch.getFocusSprite());
     _Window->draw(*com.getFocusSprite());
     _Window->draw(*d1->getSprite(rolls[0]));
     _Window->draw(*d2->getSprite(rolls[1]));
+    drawAround();
     _Window->display();
 
     //sleeps for three seconds
@@ -128,28 +153,6 @@ void Board::drawRolls(const int* rolls)
 
     delete d1;
     delete d2;
-}
-
-/**
- * Prints each player's piece on the board
- * @param window Window to update
- * @param players Vector containing every player
- */
-void Board::drawPieces(vector<Player*> players)
-{
-    //refreshes screen before adding other things
-    drawBoard(true, false);
-    //prints each player's piece on the board
-    for (size_t i = 0; i < players.size(); i++)
-    {
-        //moves the piece ...
-        movePiece(players[i]);
-
-        //...then displays it
-        _Window->draw(*players[i]->getPiece()->getSprite());
-    }
-    _Window->display();
-    sleep(seconds(1));
 }
 
 /**
@@ -314,23 +317,53 @@ void Board::drawBoard(const bool clear, const bool display)
     _Window->draw(_Sprite);
     _Window->draw(*ch.getMainSprite());
     _Window->draw(*com.getMainSprite());
+
+    drawAround();
+
+    if (display)
+        _Window->display();
+}
+
+/**
+ * @brief Draws the text around the board
+ */
+void Board::drawAround()
+{
     _Window->draw(_YesBox);
     _Window->draw(_NoBox);
     _Window->draw(_YesText);
     _Window->draw(_NoText);
 
     // Draws the turn
-    drawText(Vector2f(820, 50), "Turn : ", Color::Black, 40, false, false);
-    drawText(Vector2f(970, 50), to_string(*_CurrentTurn), Color::Blue, 40, false, false);
-    
-    // Draw info about the player
-    drawText(Vector2f(820, 130), "Player : ", Color::Black, 40, false, false);
-    drawText(Vector2f(970, 130), _CurrentPlayer->getName(), Color::Blue, 40, false, false);
-    drawText(Vector2f(820, 210), "Money : ", Color::Black, 40, false, false);
-    drawText(Vector2f(970, 210), to_string(_CurrentPlayer->getMoney()) + " $", Color::Blue, 40, false, false);
+    Text turn(to_string(*_CurrentTurn), _Font, 40);
+    turn.setPosition(Vector2f(970, 50));
+    turn.setFillColor(Color::Blue);
+    _Window->draw(_Turn);
+    _Window->draw(turn);
 
-    if (display)
-        _Window->display();
+    // Draws the pseudo
+    Text pseudo(_CurrentPlayer->getName(), _Font, 40);
+    pseudo.setPosition(Vector2f(970, 130));
+    pseudo.setFillColor(Color::Blue);
+    _Window->draw(_Pseudo);
+    _Window->draw(pseudo);
+
+    // Draws the money
+    Text money(to_string(_CurrentPlayer->getMoney()), _Font, 40);
+    money.setPosition(Vector2f(970, 210));
+    money.setFillColor(Color::Blue);
+    _Window->draw(_Money);
+    _Window->draw(money);
+
+    // Prints each player's piece on the board
+    for (size_t i = 0; i < _Players->size(); i++)
+    {
+        //moves the piece ...
+        movePiece(_Players->at(i));
+
+        //...then displays it
+        _Window->draw(*_Players->at(i)->getPiece()->getSprite());
+    }
 }
 
 /**
@@ -402,32 +435,7 @@ void Board::drawText(const Vector2f pos, const string text, const Color color, c
     textToDraw.setFillColor(color);
     textToDraw.setPosition(pos);
 
-    if (clear)
-    {
-        Chances ch;
-        Communities com;
-
-        _Window->clear(Color::White);
-        _Window->draw(_Sprite);
-        _Window->draw(*ch.getMainSprite());
-        _Window->draw(*com.getMainSprite());
-        _Window->draw(_YesBox);
-        _Window->draw(_NoBox);
-        _Window->draw(_YesText);
-        _Window->draw(_NoText);
-
-        //drawPieces();
-
-        // Draws the turn
-        drawText(Vector2f(820, 50), "Turn : ", Color::Black, 40, false, false);
-        drawText(Vector2f(970, 50), to_string(*_CurrentTurn), Color::Blue, 40, false, false);
-        
-        // Draw info about the player
-        drawText(Vector2f(820, 130), "Player : ", Color::Black, 40, false, false);
-        drawText(Vector2f(970, 130), _CurrentPlayer->getName(), Color::Blue, 40, false, false);
-        drawText(Vector2f(820, 210), "Money : ", Color::Black, 40, false, false);
-        drawText(Vector2f(970, 210), to_string(_CurrentPlayer->getMoney()) + " $", Color::Blue, 40, false, false);
-    }
+    drawBoard(clear, false);
 
     _Window->draw(textToDraw);
     if (display)

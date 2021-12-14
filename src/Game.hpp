@@ -15,6 +15,7 @@ class Game
     private:
         RenderWindow    _Window;
         vector<Player*> _Players;
+        vector<Player*> _PlayersCopy;
         vector<House*>  _Houses;
         Player*         _CurrentPlayer;
         Dice*           _Dice1;
