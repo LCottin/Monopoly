@@ -22,7 +22,7 @@ class Board
     protected:
         Texture         _Texture, _FocusTexture;
         Sprite          _Sprite, _FocusSprite;
-        void            movePiece(RenderWindow& window, Player* player);
+        RenderWindow    *_Window;
 
         Font            _Font;
         Text            _YesText, _NoText;
@@ -33,18 +33,21 @@ class Board
         Vector2f        _YesBoxSize, _NoBoxSize;
         Vector2f        _YesTextPos, _NoTextPos;
 
+        int*            _CurrentTurn; 
+        Player*         _CurrentPlayer;
+        void            movePiece(Player* player);
 
     public:
-        Board();
+        Board(RenderWindow* window, int* currentTurn);
         Sprite* getSprite();
         Sprite* getOtherSprite();
-        void    drawBoard(RenderWindow& window, const bool clear = true, const bool display = true);
-        void    drawPieces(RenderWindow& window, vector<Player*> players);
-        void    drawRolls(RenderWindow& window, const int* rolls);
-        void    drawCard(RenderWindow& window, const Sprite* card, const bool clear = true, const bool display = true);
-        void    drawText(RenderWindow& window, const Vector2f pos, const string text, const Color color = Color::Blue, const bool clear = true, const bool display = true);
-        void    drawTurn(RenderWindow& window, const int turn, const bool clear = true, const bool display = true);
-        BOXES   boxClicked(RenderWindow& window);
+        void    setCurrentPlayer(Player* player);
+        void    drawBoard(const bool clear = true, const bool display = true);
+        void    drawPieces(vector<Player*> players);
+        void    drawRolls(const int* rolls);
+        void    drawCard(const Sprite* card, const bool clear = true, const bool display = true);
+        void    drawText(const Vector2f pos, const string text, const Color color = Color::Blue, const bool clear = true, const bool display = true);
+        BOXES   boxClicked();
         ~Board();
 };
 
