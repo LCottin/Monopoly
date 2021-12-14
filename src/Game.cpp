@@ -14,7 +14,7 @@ Game::Game()
 
     _Dice1          = new Dice();
     _Dice2          = new Dice();
-    _Board          = new Board();
+    _Board          = new Board(&_Window, &_TotalTurns);
     _Bank           = new Bank();
     _Chances        = new Chances();
     _Communities    = new Communities();
@@ -124,9 +124,9 @@ bool Game::playGame()
 
     while (_Window.isOpen())
     {
-        _TotalTurns++;
-        _CurrentTurn    = (_CurrentTurn + 1) % _NbPlayers;
         _CurrentPlayer  = playersCopy[_CurrentTurn];
+        _CurrentTurn    = (_CurrentTurn + 1) % _NbPlayers;
+        _TotalTurns++;
 
         Event event;
 
@@ -139,11 +139,9 @@ bool Game::playGame()
             }
         } 
 
-        string message = "Turn : " + to_string(_TotalTurns);
-
-        _Board->drawBoard(_Window);
-        _Board->drawPieces(_Window, playersCopy);
-        _Board->drawTurn(_Window, _TotalTurns);
+        _Board->setCurrentPlayer(_CurrentPlayer);
+        _Board->drawBoard();
+        _Board->drawPieces(playersCopy);
 
         sleep(milliseconds(1000));
         //TODO: implements prison before next turn
@@ -156,7 +154,7 @@ bool Game::playGame()
         /* ===================================== */
         /* STEP 2 : prints rolling on the screen */
         /* ===================================== */
-        _Board->drawRolls(_Window, rolls);
+        _Board->drawRolls(rolls);
 
         /* =========================== */
         /* STEP 3 : player moves piece */
@@ -168,7 +166,7 @@ bool Game::playGame()
         /* ====================================== */
         /* STEP 4 : updates position on the board */
         /* ====================================== */
-        _Board->drawPieces(_Window, playersCopy);
+        _Board->drawPieces(playersCopy);
 
         /* =========================================== */
         /* STEP 5 : player acts according to the place */
@@ -179,7 +177,7 @@ bool Game::playGame()
         {
             _CurrentPlayer->setInJail(true);
             _CurrentPlayer->move(JAIL);
-            _Board->drawPieces(_Window, playersCopy);
+            _Board->drawPieces(playersCopy);
             continue;
         }
 
@@ -199,7 +197,7 @@ bool Game::playGame()
                         return true;
                     }
             }
-            _Board->drawPieces(_Window, playersCopy);
+            _Board->drawPieces(playersCopy);
             continue;
         }
 
@@ -212,7 +210,7 @@ bool Game::playGame()
             cout << "Your choice : ";
             bool ok = false;
 
-            BOXES box = _Board->boxClicked(_Window);
+            BOXES box = _Board->boxClicked();
             if (box == YES)
             {
                 cout << "You pay 200." << endl;
@@ -241,7 +239,7 @@ bool Game::playGame()
                 }
             }
 
-            _Board->drawPieces(_Window, playersCopy);
+            _Board->drawPieces(playersCopy);
             continue;
         }
 
@@ -262,20 +260,20 @@ bool Game::playGame()
         // Checks if the player is on COMMUNITY_CHEST
         if (_CurrentPlayer->getPosition() == COMMUNITY_CHEST_1 || _CurrentPlayer->getPosition() == COMMUNITY_CHEST_2 || _CurrentPlayer->getPosition() == COMMUNITY_CHEST_3)
         {
-            _Board->drawCard(_Window, _Communities->drawCard(), false);
+            _Board->drawCard(_Communities->drawCard(), false);
             _Communities->execute(_Bank, _CurrentPlayer, playersCopy);
             sleep(milliseconds(3000));
-            _Board->drawPieces(_Window, playersCopy);
+            _Board->drawPieces(playersCopy);
             continue;
         }
 
         // Checks if the player is on CHANCE_CARD
         if (_CurrentPlayer->getPosition() == CHANCE_1 || _CurrentPlayer->getPosition() == CHANCE_2 || _CurrentPlayer->getPosition() == CHANCE_3)
         {
-            _Board->drawCard(_Window, _Chances->drawCard(), false);
+            _Board->drawCard(_Chances->drawCard(), false);
             _Chances->execute(_Bank, _CurrentPlayer, playersCopy);
             sleep(milliseconds(3000));
-            _Board->drawPieces(_Window, playersCopy);
+            _Board->drawPieces(playersCopy);
             continue;
         }
 
@@ -294,7 +292,7 @@ bool Game::playGame()
             cout << "No owner." << endl;
             cout << "You currently have " << _CurrentPlayer->getMoney() << " dollars." << endl;
             cout << "Do you want to buy this house ? Click on the box." << endl;
-            BOXES box = _Board->boxClicked(_Window);
+            BOXES box = _Board->boxClicked();
             if (box == YES)
             {
                 if (!_CurrentPlayer->buy(currentHouse))
@@ -315,7 +313,7 @@ bool Game::playGame()
                 cout << "You are at home, you already own this house" << endl;
                 cout << "You currently have " << _CurrentPlayer->getMoney() << " dollars." << endl;
                 cout << "Do you want to sell this house ? Click on the box." << endl;
-                BOXES box = _Board->boxClicked(_Window);
+                BOXES box = _Board->boxClicked();
                 if (box == YES)
                 {
                     if (!_CurrentPlayer->sell(currentHouse))
