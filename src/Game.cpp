@@ -132,6 +132,8 @@ bool Game::playGame()
         bool replay = false;
         int doubles = 0;
 
+        replay: //replayes the turn if the player made a double 
+        
         while (_Window.pollEvent(event))
         {
             if (event.type == Event::Closed)
@@ -141,7 +143,6 @@ bool Game::playGame()
             }
         } 
 
-        replay: //replayes the turn if the player made a double 
         _Board->setCurrentPlayer(_CurrentPlayer);
         _Board->drawBoard();
         _Board->drawText(Vector2f(810, 300), "Next Player !", Color::Red);
@@ -153,16 +154,24 @@ bool Game::playGame()
         /* =========================== */
         int* rolls = _CurrentPlayer->rollDices(_Dice1, _Dice2);
 
+        /* ===================================== */
+        /* STEP 2 : prints rolling on the screen */
+        /* ===================================== */
+        _Board->drawRolls(rolls);
+        
         //if doubles, player replays
         replay = (rolls[0] == rolls[1]);
         if (replay)
         {
             cout << "Doubles ! You can play again at the end of your turn." << endl;
+            _Board->drawText(Vector2f(810, 400), "Doubles ! You can play again \nat the end of your turn.", Color::Red);
             doubles++;
+            sleep(milliseconds(1000));
             //if doubles == 2, player goes to prison
             if (doubles == 2)
             {
                 cout << "Three doubles in a row : you have been sent jail ! " << endl;
+                _Board->drawText(Vector2f(810, 400), "Three doubles in a row : \nyou have been sent jail ! ", Color::Red);
                 _CurrentPlayer->setInJail(true);
                 _CurrentPlayer->move(JAIL);
                 _Board->drawBoard();
@@ -174,11 +183,6 @@ bool Game::playGame()
         }
         else
             doubles = 0;
-
-        /* ===================================== */
-        /* STEP 2 : prints rolling on the screen */
-        /* ===================================== */
-        _Board->drawRolls(rolls);
 
         /* =========================== */
         /* STEP 3 : player moves piece */
@@ -200,9 +204,12 @@ bool Game::playGame()
         // Checks if the player should go to jail
         if (place == GO_TO_JAIL)
         {
+            cout << "You have been sent to jail ! " << endl;
+            _Board->drawText(Vector2f(810, 400), "You have been sent to jail ! ", Color::Red);
             _CurrentPlayer->setInJail(true);
             _CurrentPlayer->move(JAIL);
             _Board->drawBoard();
+            sleep(milliseconds(1000));
             continue;
         }
 
@@ -213,6 +220,7 @@ bool Game::playGame()
             {
                 cout << "You don't have enough money to pay the tax. You lose." << endl;
                 cout << "You are eliminated from the game." << endl;
+                _Board->drawText(Vector2f(810, 400), "You don't have enough money to pay \nthe tax. You lose.", Color::Red);
                 delete _Players[_CurrentTurn];
                 _Players.erase(_Players.begin() + _CurrentTurn);
                 _NbPlayers--;
@@ -220,13 +228,14 @@ bool Game::playGame()
                 if (_NbPlayers == 1)
                 {
                     cout << "The winner is " << _Players[0]->getName() << " !" << endl;
+                    _Board->drawText(Vector2f(810, 400), "The winner is " + _Players[0]->getName() + " !", Color::Red);
                     return true;
                 }
             }
             _Board->drawBoard();
+            sleep(milliseconds(1000));
             if (replay)
             {
-                sleep(milliseconds(1000));
                 goto replay;
             }
             continue;
@@ -239,12 +248,16 @@ bool Game::playGame()
             cout << "1. Pay 200" << endl;
             cout << "2. Pay 10% of your total worth" << endl;
             cout << "Your choice : ";
+            _Board->drawText(Vector2f(810, 400), "You have to choose to pay 200 (1) or \n10% of your total worth (2).", Color::Red);
+            sleep(milliseconds(1000));
             bool ok = false;
 
             BOXES box = _Board->boxClicked();
             if (box == YES)
             {
                 cout << "You pay 200." << endl;
+                _Board->drawText(Vector2f(810, 400), "You pay 200.", Color::Red);
+                sleep(milliseconds(1000));
                 ok = _CurrentPlayer->payBank(_Bank, 200);
             }
             else if (box == NO)
@@ -252,7 +265,9 @@ bool Game::playGame()
                 int assets = _CurrentPlayer->getAssets();
                 cout << "Your total worth is " << assets << endl;
                 cout << "You have to pay " << assets / 10 << endl;
+                _Board->drawText(Vector2f(810, 400), "Your total worth is " + to_string(assets) + ".\nYou have to pay " + to_string(assets / 10) + ".", Color::Red);
                 ok = _CurrentPlayer->payBank(_Bank, assets / 10);
+                sleep(milliseconds(1000));
             }
             else if (box == EXIT)
             {
@@ -265,6 +280,7 @@ bool Game::playGame()
             {
                 cout << "You don't have enough money to pay the tax. You lose." << endl;
                 cout << "You are eliminated from the game." << endl;
+                _Board->drawText(Vector2f(810, 400), "You don't have enough money to pay \nthe tax. You lose.", Color::Red);
                 delete _Players[_CurrentTurn];
                 _Players.erase(_Players.begin() + _CurrentTurn);
                 _NbPlayers--;
@@ -272,14 +288,15 @@ bool Game::playGame()
                 if (_NbPlayers == 1)
                 {
                     cout << "The winner is " << _Players[0]->getName() << " !" << endl;
+                    _Board->drawText(Vector2f(810, 400), "The winner is " + _Players[0]->getName() + " !", Color::Red);
                     return true;
                 }
             }
 
             _Board->drawBoard();
+            sleep(milliseconds(1000));
             if (replay)
             {
-                sleep(milliseconds(1000));
                 goto replay;
             }
             continue;
@@ -289,9 +306,10 @@ bool Game::playGame()
         if (place == JAIL)
         {
             cout << "You are visiting the prison." << endl;
+            _Board->drawText(Vector2f(810, 400), "You are visiting \nthe prison.", Color::Red);
+            sleep(milliseconds(1000));
             if (replay)
             {
-                sleep(milliseconds(1000));
                 goto replay;
             }
             continue;
@@ -301,9 +319,10 @@ bool Game::playGame()
         if (place == FREE_PARKING)
         {
             cout << "You are resting on free parking." << endl;
+            _Board->drawText(Vector2f(810, 400), "You are resting \non free parking.", Color::Red);
+            sleep(milliseconds(1000));
             if (replay)
             {
-                sleep(milliseconds(1000));
                 goto replay;
             }
             continue;
@@ -353,16 +372,28 @@ bool Game::playGame()
         // if the player is on an non-sold house, he can buy it
         if (currentHouse->getOwner() == nullptr)
         {
-            _Board->drawText(Vector2f(810, 450), "No owner.\nDo you want to buy it ?\nClick on the box", Color::Blue, 30, true, true);
+            _Board->drawText(Vector2f(810, 450), "No owner.\nDo you want to buy it ?\nClick on the box", Color::Blue, 30);
             BOXES box = _Board->boxClicked();
             if (box == YES)
             {
                 if (!_CurrentPlayer->buy(currentHouse))
+                {
                     cout << "You can't buy this house." << endl;
+                    _Board->drawText(Vector2f(810, 400), "You can't buy this house.", Color::Red);
+                    sleep(milliseconds(1000));
+                }
+                else
+                {
+                    cout << "You bought the house." << endl;
+                    _Board->drawText(Vector2f(810, 400), "You bought the house.", Color::Red);
+                    sleep(milliseconds(1000));
+                }
             }
             else if (box == NO)
             {
                 cout << "You don't buy this house." << endl;
+                _Board->drawText(Vector2f(810, 400), "You don't buy this house.", Color::Red);
+                sleep(milliseconds(1000));
             }
             else if (box == EXIT)
             {
@@ -380,15 +411,27 @@ bool Game::playGame()
                 cout << "You are at home, you already own this house" << endl;
                 cout << "You currently have " << _CurrentPlayer->getMoney() << " dollars." << endl;
                 cout << "Do you want to sell this house ? Click on the box." << endl;
+                _Board->drawText(Vector2f(810, 400), "You are at home, you \nalready own this house.\nDo you want to sell it ?", Color::Red);
                 BOXES box = _Board->boxClicked();
                 if (box == YES)
                 {
                     if (!_CurrentPlayer->sell(currentHouse))
+                    {    
                         cout << "You can't sell this house." << endl;
+                        _Board->drawText(Vector2f(810, 400), "You can't sell this house.", Color::Red);
+                        sleep(milliseconds(1000));
+                    }
+                    else
+                    {
+                        cout << "You sold the house." << endl;
+                        _Board->drawText(Vector2f(810, 400), "You sold the house.", Color::Red);
+                        sleep(milliseconds(1000));
+                    }
                 }
                 else if (box == NO)
                 {
                     cout << "You don't sell this house." << endl;
+                    _Board->drawText(Vector2f(810, 400), "You don't sell this house.", Color::Red);
                 }
                 else if (box == EXIT)
                 {
@@ -430,6 +473,7 @@ bool Game::playGame()
                 {
                     cout << "You don't have enough money to pay the rent." << endl;
                     cout << "You are eliminated from the game." << endl;
+                    _Board->drawText(Vector2f(810, 400), "You don't have enough \nmoney to pay the rent.", Color::Red);
                     delete _Players[_CurrentTurn];
                     _Players.erase(_Players.begin() + _CurrentTurn);
                     _NbPlayers--;
@@ -437,14 +481,16 @@ bool Game::playGame()
                     if (_NbPlayers == 1)
                     {
                         cout << "The winner is " << _Players[0]->getName() << " !" << endl;
+                        _Board->drawText(Vector2f(810, 400), "The winner is " + _Players[0]->getName() + " !", Color::Red);
                         return true;
                     }
                 }
             }
         }
+        _Board->drawBoard();
+        sleep(milliseconds(1000));
         if (replay)
         {
-            sleep(milliseconds(1000));
             goto replay;
         }
         continue;
