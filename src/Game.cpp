@@ -118,12 +118,12 @@ void Game::getNbPlayers()
  */
 bool Game::playGame()
 {
+    printf("\e[1;1H\e[2J");
     getNbPlayers();
-
-    //vector<Player*> _Players = _Players;
 
     while (_Window.isOpen())
     {
+        printf("\e[1;1H\e[2J");
         _CurrentPlayer  = _Players[_CurrentTurn];
         _CurrentTurn    = (_CurrentTurn + 1) % _NbPlayers;
         _TotalTurns++;
