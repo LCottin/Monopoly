@@ -47,7 +47,7 @@ Player::Player(const string name)
     {
         for (size_t i = 0; i < _AvailablePieces.size(); i++)
         {
-            cout << _AvailableNames[i] << " = " << _AvailablePieces[i] << endl;
+            printf("%2d - %s\n", _AvailablePieces[i], _AvailableNames[i].c_str());
         }
         cout << "Number = ";
         getline(cin, answer);
@@ -56,43 +56,43 @@ Player::Player(const string name)
     //sets player's piece
     switch (stoi(answer))
     {
-        case 1:
+        case 0:
             type = BARROW;
             break;
 
-        case 2:
+        case 1:
             type = BASEBALL;
             break;
 
-        case 3:
+        case 2:
             type = CAR;
             break;
 
-        case 4:
+        case 3:
             type = DOG;
             break;
 
-        case 5:
+        case 4:
             type = DRAGON;
             break;
 
-        case 6:
+        case 5:
             type = HAT;
             break;
 
-        case 7:
+        case 6:
             type = PRETZEL;
             break;
 
-        case 8:
+        case 7:
             type = SHIP;
             break;
 
-        case 9:
+        case 8:
             type = SOCCER;
             break;
 
-        case 10:
+        case 9:
             type = SURFER;
             break;
         
