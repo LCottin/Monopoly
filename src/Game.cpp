@@ -80,7 +80,7 @@ Game::Game()
     House* h28 = new House(BOARDWALK, "Boardwalk", 400, 200);
     _Houses.push_back(h28);
 }
-
+ 
 /**
  * @brief Tells how many players will plays the game
  */
