@@ -20,6 +20,7 @@ class Player
     private:
         string          _Pseudo;
         Piece*          _Piece;
+        Bank*           _Bank;
         int             _Money;
         bool            _Alive;
         bool            _InJail;
@@ -35,8 +36,8 @@ class Player
         void updateAssets();
 
     public:
-        Player(const string name);
-        Player(const string name, const TYPES type);
+        Player(const string name, Bank* bank);
+        Player(const string name, Bank* bank, const TYPES type);
 
         string  getName() const;
         Piece*  getPiece() const;
@@ -49,17 +50,17 @@ class Player
         int     getTurnsInJail() const;
 
         void    setInJail(const bool inJail);
-        void    go(Bank* bank);
+        void    go();
         int*    rollDices(Dice* d1, Dice* d2);
         bool    move();
         bool    move(const int pos);
         bool    buy(House* house);
         bool    sell(House* house);
-        void    addMoney(const int money);
-        bool    payBank(Bank* bank, const int money);
+        bool    addMoney(const int money, const bool fromBank = true);
+        bool    payBank(const int money);
         bool    removeMoney(const int money);
         bool    payRent(Player* player, const int amount);
-        bool    updateTurnsInJail(Bank& bank);
+        bool    updateTurnsInJail();
     
         ~Player();
 };

@@ -61,7 +61,7 @@ bool Chances::execute(Bank* bank, Player* player, vector<Player*>& players)
         {
             //Goes to go and collects 200
             player->move(GO);
-            player->go(bank);
+            player->go();
             cout << "You have collected 200 from the bank" << endl;
             return true;
         }
@@ -71,7 +71,7 @@ bool Chances::execute(Bank* bank, Player* player, vector<Player*>& players)
             // Goes to Illinois Ave and collects 200 if you pass go
             if(player->move(ILLINOIS_AVENUE))
             {
-                player->go(bank);
+                player->go();
                 cout << "You have collected 200 from the bank" << endl;
             }
             cout << "You went to Illinois Avenue" << endl;
@@ -83,7 +83,7 @@ bool Chances::execute(Bank* bank, Player* player, vector<Player*>& players)
             // Goes to St. Charles Place and collects 200 if you pass go
             if(player->move(ST_CHARLES_PLACE))
             {
-                player->go(bank);
+                player->go();
                 cout << "You have collected 200 from the bank" << endl;
             }
             cout << "You went to St. Charles Place" << endl;
@@ -93,9 +93,9 @@ bool Chances::execute(Bank* bank, Player* player, vector<Player*>& players)
         case 4:
         {
             // Goes to nearest utility and collects 100
-            int pos = player->getPosition();
-            int disWaterWorks       = abs(pos - WATER_WORKS);
-            int disElectricCompany  = abs(pos - ELECTRIC_COMPANY);
+            const int pos = player->getPosition();
+            const int disWaterWorks       = abs(pos - WATER_WORKS);
+            const int disElectricCompany  = abs(pos - ELECTRIC_COMPANY);
             bool go = false;
 
             // Moves the player to the nearest utility
@@ -113,7 +113,7 @@ bool Chances::execute(Bank* bank, Player* player, vector<Player*>& players)
             // Collects 200 if the player passes go
             if (go)
             {
-                player->go(bank);
+                player->go();
                 cout << "You have collected 200 from the bank" << endl;
             }
 
@@ -123,21 +123,21 @@ bool Chances::execute(Bank* bank, Player* player, vector<Player*>& players)
         case 5:
         {
             // Goes to nearest railroad
-            int pos = player->getPosition();
+            const int pos = player->getPosition();
             allPos.push_back(pos - READING_RAILROAD);
             allPos.push_back(pos - PENNSYLVANIA_RAILROAD);
             allPos.push_back(pos - B_AND_O_RAILROAD);
             allPos.push_back(pos - SHORT_LINE_RAILROAD);
-            int minPos = *min_element(allPos.begin(), allPos.end());
+            const int minPos = *min_element(allPos.begin(), allPos.end());
 
             // Moves the player to the nearest railroad
-            bool go = player->move(minPos);
+            const bool go = player->move(minPos);
             cout << "You went to the nearest railroad" << endl;
 
             // Collects 200 if the player passes go
             if (go)
             {
-                player->go(bank);
+                player->go();
                 cout << "You have collected 200 from the bank" << endl;
             }
             return true;
@@ -146,7 +146,6 @@ bool Chances::execute(Bank* bank, Player* player, vector<Player*>& players)
         case 6:
         {
             // Receives 50 from the bank
-            bank->output(50);
             player->addMoney(50);
             cout << "You have received 50 from the bank" << endl;
             return true;
@@ -164,7 +163,7 @@ bool Chances::execute(Bank* bank, Player* player, vector<Player*>& players)
             // Goes back 3 spaces 
             if (player->move(player->getPosition() - 3) == true)
             {
-                player->go(bank);
+                player->go();
                 cout << "You have collected 200 from the bank" << endl;
             }
             cout << "You went back 3 spaces" << endl;
@@ -183,8 +182,8 @@ bool Chances::execute(Bank* bank, Player* player, vector<Player*>& players)
         {
             //TODO: implements hotels
             // Makes general repairs on all your property
-            int toPay = player->getPropertyCount() * 25;
-            bool ok = player->payBank(bank, toPay);
+            const int toPay = player->getPropertyCount() * 25;
+            bool ok = player->payBank(toPay);
             if (ok)
                 cout << "You have paid the bank " << toPay << " for the repairs" << endl;
             else
@@ -195,7 +194,7 @@ bool Chances::execute(Bank* bank, Player* player, vector<Player*>& players)
         case 11:
         {
             // Payes poor tax of $15
-            bool ok = player->payBank(bank, 15);
+            const bool ok = player->payBank(15);
             if (ok)
                 cout << "You have paid the bank 15 for the tax" << endl;
             else
@@ -208,7 +207,7 @@ bool Chances::execute(Bank* bank, Player* player, vector<Player*>& players)
             // Takes a trip to Reading Railroad
             if (player->move(READING_RAILROAD))
             {
-                player->go(bank);
+                player->go();
                 cout << "You have collected 200 from the bank" << endl;
             }
             cout << "You went to Reading Railroad" << endl;
@@ -220,7 +219,7 @@ bool Chances::execute(Bank* bank, Player* player, vector<Player*>& players)
             // Goes to Boardwalk and collects 200 if you pass go
             if(player->move(BOARDWALK))
             {
-                player->go(bank);
+                player->go();
                 cout << "You have collected 200 from the bank" << endl;
             }
             cout << "You went to Boardwalk" << endl;
@@ -248,7 +247,6 @@ bool Chances::execute(Bank* bank, Player* player, vector<Player*>& players)
         case 15:
         {
             // Building loan matures and you get $150
-            bank->output(150);
             player->addMoney(150);
             cout << "You have received 150 from the bank" << endl;
             return true;
@@ -257,7 +255,6 @@ bool Chances::execute(Bank* bank, Player* player, vector<Player*>& players)
         case 16:
         {
             // Won a crossword competition and collect $100
-            bank->output(100);
             player->addMoney(100);
             cout << "You have received 100 from the bank" << endl;
             return true;

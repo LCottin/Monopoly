@@ -107,7 +107,7 @@ void Game::getNbPlayers()
             getline(cin, name);
         } while(name == "none" || name == "");
 
-        Player* pl = new Player(name);
+        Player* pl = new Player(name, _Bank);
         _Players.push_back(pl);
     }
     cout << "Let the game begin ! " << endl;
@@ -128,12 +128,11 @@ bool Game::playGame()
         _CurrentTurn    = (_CurrentTurn + 1) % _NbPlayers;
         _TotalTurns++;
 
-        _CurrentPlayer->setInJail(true);
-        _CurrentPlayer->move(JAIL);
         Event event;
         bool replay = false;
         int doubles = 0;
         int* rolls  = nullptr;
+
         replay: //replayes the turn if the player made a double 
         
         while (_Window.pollEvent(event))
@@ -157,7 +156,7 @@ bool Game::playGame()
             BOXES box = _Board->boxClicked();
             if (box == YES)
             {
-                _CurrentPlayer->payBank(_Bank, 50);
+                _CurrentPlayer->payBank(50);
                 _CurrentPlayer->setInJail(false);
                 _Board->drawText(Vector2f(810, 350), "You are now free. Play !", Color::Blue);
             }
@@ -165,7 +164,7 @@ bool Game::playGame()
             {
                 _Board->drawText(Vector2f(810, 350), "You don't pay.", Color::Blue);   
                 const int* rolls2 = _CurrentPlayer->rollDices(_Dice1, _Dice2);
-                bool inJail       = _CurrentPlayer->updateTurnsInJail(*_Bank);
+                bool inJail       = _CurrentPlayer->updateTurnsInJail();
                 if ( (rolls2[0] == rolls2[1]) || (inJail == false) )
                 {
                     _CurrentPlayer->move();
@@ -226,7 +225,7 @@ bool Game::playGame()
         /* =========================== */
         // bool go = _CurrentPlayer->move();
         if (_CurrentPlayer->move() == true)
-            _CurrentPlayer->go(_Bank);
+            _CurrentPlayer->go();
 
         /* ====================================== */
         /* STEP 4 : updates position on the board */
@@ -254,7 +253,7 @@ bool Game::playGame()
         // Checks if the player is on LUXURY_TAX
         if (place == LUXURY_TAX)
         {
-            if (!_CurrentPlayer->payBank(_Bank, 75))
+            if (!_CurrentPlayer->payBank(75))
             {
                 cout << "You don't have enough money to pay the tax. You lose." << endl;
                 cout << "You are eliminated from the game." << endl;
@@ -296,15 +295,15 @@ bool Game::playGame()
                 cout << "You pay 200." << endl;
                 _Board->drawText(Vector2f(810, 400), "You pay 200.", Color::Red);
                 sleep(milliseconds(1000));
-                ok = _CurrentPlayer->payBank(_Bank, 200);
+                ok = _CurrentPlayer->payBank(200);
             }
             else if (box == NO)
             {
-                int assets = _CurrentPlayer->getAssets();
+                const int assets = _CurrentPlayer->getAssets();
                 cout << "Your total worth is " << assets << endl;
                 cout << "You have to pay " << assets / 10 << endl;
                 _Board->drawText(Vector2f(810, 400), "Your total worth is " + to_string(assets) + ".\nYou have to pay " + to_string(assets / 10) + ".", Color::Red);
-                ok = _CurrentPlayer->payBank(_Bank, assets / 10);
+                ok = _CurrentPlayer->payBank(assets / 10);
                 sleep(milliseconds(1000));
             }
             else if (box == EXIT)

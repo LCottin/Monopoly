@@ -28,7 +28,7 @@ vector<string> Player::_AvailableNames = {"Barrow",
  * @brief Constructor for Player
  * @param name Player's name
  */
-Player::Player(const string name)
+Player::Player(const string name, Bank* bank)
 {
     _Pseudo      = name;
     _Money       = 2000;
@@ -37,6 +37,7 @@ Player::Player(const string name)
     _Assets      = _Money;
     _InJail      = false;
     _TurnsInJail = 0;
+    _Bank        = bank;
 
     string answer;
     TYPES type;
@@ -113,7 +114,7 @@ Player::Player(const string name)
  * @param name Player's name
  * @param piece Player's piece
  */
-Player::Player(const string name, const TYPES piece)
+Player::Player(const string name, Bank* bank, const TYPES piece)
 {
     _Pseudo      = name;
     _Money       = 2000;
@@ -121,6 +122,7 @@ Player::Player(const string name, const TYPES piece)
     _Position    = GO;
     _InJail      = false;
     _TurnsInJail = 0;
+    _Bank        = bank;
 
     _Piece = new Piece(piece);
 }
@@ -192,9 +194,9 @@ int Player::getTurnsInJail() const
  * @brief Each time a player passes go, it receives $200 from the bank
  * @param bank Bank of the game
  */
-void Player::go(Bank* bank)
+void Player::go()
 {
-    bank->output(200);
+    _Bank->output(200);
     _Money += 200;
     updateAssets();
 }
@@ -271,9 +273,9 @@ void Player::setInJail(const bool inJail)
  * @param amount Amount to pay
  * @returns True if the player has enough money, else false
  */
-bool Player::payBank(Bank* bank, const int amount)
+bool Player::payBank(const int amount)
 {
-    bank->input(amount);
+    _Bank->input(amount);
     return removeMoney(amount);
 }
 
@@ -323,13 +325,14 @@ bool Player::sell(House* house)
 }
 
 /**
- * @brief Adds money to player's account
+ * @brief Adds money to player's account and removes it from the bank
  * @param amount Amount to add 
  */
-void Player::addMoney(const int amount)
+bool Player::addMoney(const int amount, const bool fromBank)
 {
     _Money += amount;
     updateAssets();
+    return fromBank ? _Bank->output(amount) : true;
 }
 
 /**
@@ -386,14 +389,14 @@ void Player::updateAssets()
  * @param turns Number of turns
  * @returns True if the player is still in jail, else false
  */
-bool Player::updateTurnsInJail(Bank& bank)
+bool Player::updateTurnsInJail()
 {
     _TurnsInJail++;
     if (_TurnsInJail == 3)
     {
         _InJail      = false;
         _TurnsInJail = 0;
-        payBank(&bank, 50);
+        payBank(50);
         return false;
     }
     return true;
