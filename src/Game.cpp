@@ -152,39 +152,69 @@ bool Game::playGame()
         if (_CurrentPlayer->isInJail())
         {
             _Board->drawText(Vector2f(810, 300), "You are in jail !", Color::Red);
-            _Board->drawText(Vector2f(810, 350), "Do you want to pay\n50€ to get out ?", Color::Blue);
-            BOXES box = _Board->boxClicked();
-            if (box == YES)
+
+            if (_CurrentPlayer->hasFreeCard())
             {
-                _CurrentPlayer->payBank(50);
-                _CurrentPlayer->setInJail(false);
-                _Board->drawText(Vector2f(810, 350), "You are now free. Play !", Color::Blue);
-            }
-            else if (box == NO)
-            {
-                _Board->drawText(Vector2f(810, 350), "You don't pay.", Color::Blue);   
-                const int* rolls2 = _CurrentPlayer->rollDices(_Dice1, _Dice2);
-                bool inJail       = _CurrentPlayer->updateTurnsInJail();
-                if ( (rolls2[0] == rolls2[1]) || (inJail == false) )
+                _Board->drawText(Vector2f(810, 350), "You have a free card.\nUse it ?", Color::Blue);
+                BOXES box = _Board->boxClicked();
+                if (box == YES)
                 {
-                    _CurrentPlayer->move();
-                    _Board->drawText(Vector2f(810, 350), "You made a double !", Color::Red);
-                    _Board->drawText(Vector2f(810, 400), "You are now free !", Color::Blue);
-                    goto action;
+                    _CurrentPlayer->useFreeCard();
+                    _Board->drawText(Vector2f(810, 300), "You are out of jail !", Color::Red);
+                    sleep(milliseconds(1000));
+                    goto play;
                 }
-                else
+                else if (box == NO)
                 {
-                    _Board->drawText(Vector2f(810, 350), "You stay in prison !", Color::Blue);
-                    continue;
+                    _Board->drawText(Vector2f(810, 300), "You don't use \nyour free card.", Color::Red);
+                    sleep(milliseconds(1000));
+                }
+                else if (box == EXIT)
+                {
+                    _Window.close();
+                    return false;
                 }
             }
-            else if (box == EXIT)
+
+            else
             {
-                cout << "You leave the game." << endl;
-                return true;
+                _Board->drawText(Vector2f(810, 350), "Do you want to pay\n50€ to get out ?", Color::Blue);
+                BOXES box = _Board->boxClicked();
+                if (box == YES)
+                {
+                    _CurrentPlayer->payBank(50);
+                    _CurrentPlayer->setInJail(false);
+                    _Board->drawText(Vector2f(810, 350), "You are now free. Play !", Color::Blue);
+                    sleep(milliseconds(1000));
+                    goto play;
+                }
+                else if (box == NO)
+                {
+                    _Board->drawText(Vector2f(810, 350), "You don't pay.", Color::Blue);   
+                    const int* rolls2 = _CurrentPlayer->rollDices(_Dice1, _Dice2);
+                    bool inJail       = _CurrentPlayer->updateTurnsInJail();
+                    if ( (rolls2[0] == rolls2[1]) || (inJail == false) )
+                    {
+                        _CurrentPlayer->move();
+                        _Board->drawText(Vector2f(810, 350), "You made a double !", Color::Red);
+                        _Board->drawText(Vector2f(810, 400), "You are now free !", Color::Blue);
+                        goto action;
+                    }
+                    else
+                    {
+                        _Board->drawText(Vector2f(810, 350), "You stay in prison !", Color::Blue);
+                        continue;
+                    }
+                }
+                else if (box == EXIT)
+                {
+                    cout << "You leave the game." << endl;
+                    return true;
+                }
             }
         }
 
+        play:
         /* =========================== */
         /* STEP 1 : player rolls dices */
         /* =========================== */
@@ -368,7 +398,7 @@ bool Game::playGame()
         // Checks if the player is on COMMUNITY_CHEST
         if (place == COMMUNITY_CHEST_1 || place == COMMUNITY_CHEST_2 || place == COMMUNITY_CHEST_3)
         {
-            //FIXME: Implement community chest returns
+            //TODO: Implement hotel
             _Board->drawCard(_Communities->drawCard(), false);
             _Communities->execute(_Bank, _CurrentPlayer, _Players);
             sleep(milliseconds(3000));
@@ -384,7 +414,7 @@ bool Game::playGame()
         // Checks if the player is on CHANCE_CARD
         if (place == CHANCE_1 || place == CHANCE_2 || place == CHANCE_3)
         {
-            //FIXME: Implement chance returns
+            //TODO: Implement hotel
             _Board->drawCard(_Chances->drawCard(), false);
             _Chances->execute(_Bank, _CurrentPlayer, _Players);
             sleep(milliseconds(3000));

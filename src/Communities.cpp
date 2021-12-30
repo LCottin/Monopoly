@@ -94,11 +94,18 @@ bool Communities::execute(Bank* bank, Player* player, vector<Player*>& players)
             return true;
         }
 
-        //TODO: Adds the rest of the cards
         case 5:
         {
-            // Gets out of jail free card
-            return false;
+            if (player->hasFreeCard() == false)
+            {
+                cout << "You received a Get Out of Jail Free card" << endl;
+                player->setFreeCard(true);
+            }
+            else 
+            {
+                cout << "You already have a Get Out of Jail Free card" << endl;
+            }
+            return true;
         }
 
         case 6:
