@@ -30,12 +30,13 @@ vector<string> Player::_AvailableNames = {"Barrow",
  */
 Player::Player(const string name)
 {
-    _Pseudo     = name;
-    _Money      = 2000;
-    _Alive      = true;
-    _Position   = GO;
-    _Assets     = _Money;
-    _InJail     = false;
+    _Pseudo      = name;
+    _Money       = 2000;
+    _Alive       = true;
+    _Position    = GO;
+    _Assets      = _Money;
+    _InJail      = false;
+    _TurnsInJail = 0;
 
     string answer;
     TYPES type;
@@ -114,11 +115,12 @@ Player::Player(const string name)
  */
 Player::Player(const string name, const TYPES piece)
 {
-    _Pseudo     = name;
-    _Money      = 2000;
-    _Alive      = true;
-    _Position   = GO;
-    _InJail     = false;
+    _Pseudo      = name;
+    _Money       = 2000;
+    _Alive       = true;
+    _Position    = GO;
+    _InJail      = false;
+    _TurnsInJail = 0;
 
     _Piece = new Piece(piece);
 }
@@ -175,6 +177,15 @@ bool Player::isInJail() const
 bool Player::getStatus() const
 {
     return _Alive;
+}
+
+/**
+ * @brief Tells how many turns the player is in jail
+ * @returns Number of turns
+ */
+int Player::getTurnsInJail() const
+{
+    return _TurnsInJail;
 }
 
 /**
@@ -368,6 +379,24 @@ void Player::updateAssets()
     _Assets = _Money;
     for (int i = 0; i < (int)_Properties.size(); i++)
         _Assets += _Properties[i]->getPrice();
+}
+
+/**
+ * @brief Updates number of turns in jail
+ * @param turns Number of turns
+ * @returns True if the player is still in jail, else false
+ */
+bool Player::updateTurnsInJail(Bank& bank)
+{
+    _TurnsInJail++;
+    if (_TurnsInJail == 3)
+    {
+        _InJail      = false;
+        _TurnsInJail = 0;
+        payBank(&bank, 50);
+        return false;
+    }
+    return true;
 }
 
 /**

@@ -26,6 +26,7 @@ class Player
         int             _Position;
         int             _Rolls[2];
         int             _Assets;
+        int             _TurnsInJail;
         vector<House*>  _Properties;
 
         static vector<int>      _AvailablePieces;
@@ -45,6 +46,7 @@ class Player
         int     getPropertyCount() const;
         int     getAssets() const;
         bool    isInJail() const;
+        int     getTurnsInJail() const;
 
         void    setInJail(const bool inJail);
         void    go(Bank* bank);
@@ -57,6 +59,7 @@ class Player
         bool    payBank(Bank* bank, const int money);
         bool    removeMoney(const int money);
         bool    payRent(Player* player, const int amount);
+        bool    updateTurnsInJail(Bank& bank);
     
         ~Player();
 };
