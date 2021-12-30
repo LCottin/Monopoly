@@ -21,9 +21,10 @@ class Player
         string          _Pseudo;
         Piece*          _Piece;
         Bank*           _Bank;
-        int             _Money;
         bool            _Alive;
         bool            _InJail;
+        bool            _GotFreeCard;
+        int             _Money;
         int             _Position;
         int             _Rolls[2];
         int             _Assets;
@@ -48,8 +49,11 @@ class Player
         int     getAssets() const;
         bool    isInJail() const;
         int     getTurnsInJail() const;
+        bool    hasFreeCard() const;
 
         void    setInJail(const bool inJail);
+        void    setFreeCard(const bool hasCard);
+        void    useFreeCard();
         void    go();
         int*    rollDices(Dice* d1, Dice* d2);
         bool    move();

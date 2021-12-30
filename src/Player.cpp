@@ -38,6 +38,7 @@ Player::Player(const string name, Bank* bank)
     _InJail      = false;
     _TurnsInJail = 0;
     _Bank        = bank;
+    _GotFreeCard = false;
 
     string answer;
     TYPES type;
@@ -123,6 +124,7 @@ Player::Player(const string name, Bank* bank, const TYPES piece)
     _InJail      = false;
     _TurnsInJail = 0;
     _Bank        = bank;
+    _GotFreeCard = false;
 
     _Piece = new Piece(piece);
 }
@@ -188,6 +190,15 @@ bool Player::getStatus() const
 int Player::getTurnsInJail() const
 {
     return _TurnsInJail;
+}
+
+/**
+ * @brief Tells if the player has a free card
+ * @returns True if he has, else false
+ */
+bool Player::hasFreeCard() const
+{
+    return _GotFreeCard;
 }
 
 /**
@@ -400,6 +411,24 @@ bool Player::updateTurnsInJail()
         return false;
     }
     return true;
+}
+
+/**
+ * @brief Sets if the player has a free card or not
+ * @param hasCard True if the player has a free card, else false
+ */
+void Player::setFreeCard(const bool hasCard)
+{
+    _GotFreeCard = hasCard;
+}
+
+/**
+ * @brief Uses a free card : player gets out of jail
+ */
+void Player::useFreeCard()
+{
+    _GotFreeCard = false;
+    _InJail      = false;
 }
 
 /**
