@@ -429,17 +429,16 @@ void Board::drawCard(const Sprite* sprite, const bool clear, const bool display)
  * @param window Window to draw on
  * @param text Text to draw
  */
-void Board::drawText(const Vector2f pos, const string text, const Color color, const int size, const bool clear, const bool display)
+void Board::drawText(const Vector2f pos, const string text, const Color color, const int size)
 {
     Text textToDraw(text, _Font, size);
     textToDraw.setFillColor(color);
     textToDraw.setPosition(pos);
 
-    drawBoard(clear, false);
+    drawBoard(true, false);
 
     _Window->draw(textToDraw);
-    if (display)
-        _Window->display();
+    _Window->display();
 }
 
 /**

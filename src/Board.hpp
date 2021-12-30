@@ -49,7 +49,7 @@ class Board
         void    drawBoard(const bool clear = true, const bool display = true);
         void    drawRolls(const int* rolls);
         void    drawCard(const Sprite* card, const bool clear = true, const bool display = true);
-        void    drawText(const Vector2f pos, const string text, const Color color = Color::Blue, const int size = 40, const bool clear = true, const bool display = true);
+        void    drawText(const Vector2f pos, const string text, const Color color = Color::Blue, const int size = 40);
         BOXES   boxClicked();
         ~Board();
 };
