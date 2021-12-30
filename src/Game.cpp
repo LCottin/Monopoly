@@ -128,10 +128,12 @@ bool Game::playGame()
         _CurrentTurn    = (_CurrentTurn + 1) % _NbPlayers;
         _TotalTurns++;
 
+        _CurrentPlayer->setInJail(true);
+        _CurrentPlayer->move(JAIL);
         Event event;
         bool replay = false;
         int doubles = 0;
-
+        int* rolls  = nullptr;
         replay: //replayes the turn if the player made a double 
         
         while (_Window.pollEvent(event))
@@ -148,11 +150,46 @@ bool Game::playGame()
         _Board->drawText(Vector2f(810, 300), "Next Player !", Color::Red);
         sleep(milliseconds(1000));
     
-        //TODO: implements prison before next turn
+        if (_CurrentPlayer->isInJail())
+        {
+            _Board->drawText(Vector2f(810, 300), "You are in jail !", Color::Red);
+            _Board->drawText(Vector2f(810, 350), "Do you want to pay\n50€ to get out ?", Color::Blue);
+            BOXES box = _Board->boxClicked();
+            if (box == YES)
+            {
+                _CurrentPlayer->payBank(_Bank, 50);
+                _CurrentPlayer->setInJail(false);
+                _Board->drawText(Vector2f(810, 350), "You are now free. Play !", Color::Blue);
+            }
+            else if (box == NO)
+            {
+                _Board->drawText(Vector2f(810, 350), "You don't pay.", Color::Blue);   
+                const int* rolls2 = _CurrentPlayer->rollDices(_Dice1, _Dice2);
+                bool inJail       = _CurrentPlayer->updateTurnsInJail(*_Bank);
+                if ( (rolls2[0] == rolls2[1]) || (inJail == false) )
+                {
+                    _CurrentPlayer->move();
+                    _Board->drawText(Vector2f(810, 350), "You made a double !", Color::Red);
+                    _Board->drawText(Vector2f(810, 400), "You are now free !", Color::Blue);
+                    goto action;
+                }
+                else
+                {
+                    _Board->drawText(Vector2f(810, 350), "You stay in prison !", Color::Blue);
+                    continue;
+                }
+            }
+            else if (box == EXIT)
+            {
+                cout << "You leave the game." << endl;
+                return true;
+            }
+        }
+
         /* =========================== */
         /* STEP 1 : player rolls dices */
         /* =========================== */
-        int* rolls = _CurrentPlayer->rollDices(_Dice1, _Dice2);
+        rolls = _CurrentPlayer->rollDices(_Dice1, _Dice2);
 
         /* ===================================== */
         /* STEP 2 : prints rolling on the screen */
@@ -187,8 +224,8 @@ bool Game::playGame()
         /* =========================== */
         /* STEP 3 : player moves piece */
         /* =========================== */
-        const bool go = _CurrentPlayer->move();
-        if (go)
+        // bool go = _CurrentPlayer->move();
+        if (_CurrentPlayer->move() == true)
             _CurrentPlayer->go(_Bank);
 
         /* ====================================== */
@@ -199,6 +236,7 @@ bool Game::playGame()
         /* =========================================== */
         /* STEP 5 : player acts according to the place */
         /* =========================================== */
+        action:
         const int place = _CurrentPlayer->getPosition();
 
         // Checks if the player should go to jail
